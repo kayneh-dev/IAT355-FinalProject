@@ -1,0 +1,30 @@
+html,
+body {
+  scroll-behavior: smooth;
+  font-family: system-ui, sans-serif;
+  background-color: #E8F2FF;
+  letter-spacing: -0.5px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20rem;
+    margin-top: 12rem;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+#title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#history, #interaction1, #betting-platforms, #interaction-results {
+    margin-left: 12rem;
+    margin-right: 12rem;
+}
