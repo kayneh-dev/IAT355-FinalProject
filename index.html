@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="default.css">
     <link rel="stylesheet" href="styles.css">
     <title>IAT355 Final Project</title>
@@ -25,19 +28,20 @@
 <body>
     <main>
         <section id="title">
-            <h1>Sports Betting</h1>
+            <div class="video-container">
+                <video src="/assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
+            </div>
+            <div class="title-text-container">
+                <h1 class="title-text">The Rise of <span>Sports Betting</span></h1>
+                <h2 class="title-caption">Analyzing Gambling's Culture Shift</h2>
+                <h2 class="title-caption title-credits">IAT 355</h2>
+            </div>
         </section>
 
-        <section id="googleTrend">
-            <h2>Google Search Trend</h2>
-            <p> Sports betting has steadily grown in public interest over the past two decades, and this trend is clearly reflected in the Google search data visualized above. The blue line shows how often people searched for “sports betting” over time, while the red regression line highlights the long-term direction of this activity. Despite short-term spikes around major sporting events, the upward slope of the regression line suggests a gradual and consistent increase in interest. In other words, people are searching for sports betting more frequently now than in previous years, reflecting broader cultural acceptance, expanding legalization across states, and rising accessibility through online platforms. </p>
-            <div id="searchTrendChart"></div>
-            <p>Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.</p>
-        </section>
+
 
         <section id="history">
-            <h2>History</h2>
-            <h3>How sports betting became legal in the U.S.</h3>
+            <h2>How Sports Betting Became Legal in the United States</h2>
 
             <div class="timeline">
                 <div class="container left">
@@ -79,17 +83,27 @@
             </div>
 
             
-            
-            <h2>Map of US states colored by sports betting legality.</h2>
-            <div id="sportsBettingMap"></div>
-            <p class="chart-description">
-            Blue indicates states where sports betting is fully legal. Red indicates 
-            states where sports betting is illegal. Intermediate colors represent 
-            partial legalization, such as retail-only or online-only betting.
-            </p>
-            <h3>Different states, different regulations</h3>
-            <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
+            <div class="history-map">
+                <p class="caption">Legality of Sports Betting Within U.S. States</p>
+                <div id="sportsBettingMap"></div>
+                <p class="chart-description">
+                Blue indicates states where sports betting is fully legal. Red indicates 
+                states where sports betting is illegal. Intermediate colors represent 
+                partial legalization, such as retail-only or online-only betting.
+                </p>
+                <h3>Different states, different regulations</h3>
+                <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
+            </div>
 
+        </section>
+
+
+
+        <section id="googleTrend">
+            <h2>Is It Really That Popular?</h2>
+            <p> Sports betting has steadily grown in public interest over the past two decades, and this trend is clearly reflected in the Google search data visualized above. The blue line shows how often people searched for “sports betting” over time, while the red regression line highlights the long-term direction of this activity. Despite short-term spikes around major sporting events, the upward slope of the regression line suggests a gradual and consistent increase in interest. In other words, people are searching for sports betting more frequently now than in previous years, reflecting broader cultural acceptance, expanding legalization across states, and rising accessibility through online platforms. </p>
+            <div id="searchTrendChart"></div>
+            <p>Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.</p>
         </section>
 
         <section id="interaction1">

@@ -2,27 +2,81 @@ html,
 body {
   scroll-behavior: smooth;
   font-family: system-ui, sans-serif;
-  background-color: #E8F2FF;
+  background-color: #171716;
   letter-spacing: -0.5px;
+  color: white;
 }
 
 main {
     display: flex;
     flex-direction: column;
-    gap: 20rem;
-    margin-top: 12rem;
+    gap: 12rem;
 }
 
-h1 {
-    font-size: 3rem;
-    font-weight: 600;
+h2 {
+    font-family: "Libre Caslon Text", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: -1px;
+    font-size: 36px;
+    margin-bottom: 2rem;
+}
+
+p {
+    font-family: "DM Sans", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+}
+
+.caption {
+    color: #AEAEAE;
+    font-family: "Roboto Mono", system-ui;
+    font-weight: 400;
+    font-size: 20px;
 }
 
 #title {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
+#title span {
+    font-style: italic;
+}
+
+.title-text-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-text {
+    color: white;
+    font-family: "Libre Caslon Text", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: -2px;
+    font-size: 72px;
+}
+
+.title-caption {
+    color: white;
+    font-family: "Roboto Mono", system-ui;
+    font-weight: 400;
+    font-size: 32px;
+}
+
+.title-credits {
+    margin-top: 2rem;
+}
+
 
 #googleTrend, #history, #interaction1, #betting-platforms, #interaction-results {
     margin-left: 12rem;
@@ -37,6 +91,8 @@ h1 {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  color: black;
+  margin-bottom: 6rem;
 }
 
 /* The actual timeline (the vertical ruler) */
@@ -122,4 +178,11 @@ h1 {
   background-color: white;
   position: relative;
   border-radius: 6px;
+}
+
+.history-map {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
