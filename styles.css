@@ -55,6 +55,9 @@ p {
     width: 100%;
     justify-content: center;
     align-items: center;
+
+    background-color: transparent !important;   /* <-- FORCE TRANSPARENCY */
+    pointer-events: none; /* Optional: allows clicking video through text */
 }
 
 .title-text {
