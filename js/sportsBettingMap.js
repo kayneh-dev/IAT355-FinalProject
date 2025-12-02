@@ -29,32 +29,74 @@ export const sportsBettingMapSpec = {
     }
   ],
 
-  mark: {
-    type: "geoshape",
-    stroke: "white",
-    strokeWidth: 0.7
-  },
+  // Parameter for dropdown selection
+  params: [
+    {
+      name: "statusSelect",
+      value: "All", // default: show all with their colors
+      bind: {
+        input: "select",
+        name: "View States by Legality",
+        options: ["All", "Illegal", "Retail only", "Online only", "Legal"],
+        labels: [
+          "All statuses",
+          "Illegal",
+          "Retail only",
+          "Online only",
+          "Legal"
+        ]
+      }
+    }
+  ],
 
-  encoding: {
-    color: {
-        field: "Legality",
-        type: "ordinal",                // <-- was nominal before
-        title: "Sports betting status of each states in 2025",
-        scale: {
-        // Order matters: left = lowest / most restricted
-        domain: ["Illegal", "Retail only", "Online only", "Legal"],
-        range:  ["#d73027", "#b7d9edff", "#6ba2c4ff", "#07588eff"]
-        }
+  // Two-layer map: grey background + highlighted selection
+  layer: [
+    // 1) Base layer – all states in grey
+    {
+      mark: {
+        type: "geoshape",
+        stroke: "white",
+        strokeWidth: 0.7
+      },
+      encoding: {
+        color: { value: "#eeeeee" } // background grey for all states
+      }
     },
-    tooltip: [
-        { field: "States", type: "nominal", title: "State" },
-        { field: "Legality", type: "nominal", title: "Status" }
-    ]
-  }
 
+    // 2) Highlight layer – only states that match the selection
+    {
+      transform: [
+        {
+          // If "All", show all states; otherwise only those with matching Legality
+          filter: "statusSelect == 'All' || datum.Legality == statusSelect"
+        }
+      ],
+      mark: {
+        type: "geoshape",
+        stroke: "white",
+        strokeWidth: 0.9
+      },
+      encoding: {
+        color: {
+          field: "Legality",
+          type: "ordinal",
+          title: "Sports betting status of each state in 2025",
+          scale: {
+            // Order matters: left = lowest / most restricted
+            domain: ["Illegal", "Retail only", "Online only", "Legal"],
+            range:  ["#d73027", "#b7d9edff", "#6ba2c4ff", "#07588eff"]
+          }
+        },
+        tooltip: [
+          { field: "States", type: "nominal", title: "State" },
+          { field: "Legality", type: "nominal", title: "Status" }
+        ]
+      }
+    }
+  ]
 };
 
-// Render function
+// Render function (unchanged)
 export function renderSportsBettingMap() {
   vegaEmbed("#sportsBettingMap", sportsBettingMapSpec)
     .then(() => console.log("Sports betting map loaded"))
