@@ -117,14 +117,12 @@ p {
     margin-top: 2rem;
 }
 
-
 #googleTrend, #history, #platforms, #simulator, #regulations, #interaction-results {
     padding: 6rem 12rem;
     width: 100%; 
     max-width: 100vw;
     box-sizing: border-box;
 }
-
 
 /* HISTORY SECTION */
 /* https://www.w3schools.com/howto/howto_css_timeline.asp */
@@ -236,8 +234,6 @@ p {
 }
 
 
-/* COMPONENT STYLING (The "Nice" Design) */
-
 /* Dashboard */
 .dashboard {
     background: var(--primary);
@@ -283,7 +279,6 @@ p {
 #matches-grid-container {
     display: grid;
     gap: 20px;
-    /* Grid columns are handled in Media Queries below */
 }
 
 .match-card {
@@ -391,7 +386,6 @@ p {
 /* FOR LARGE SCREENS */
 @media screen and (min-width: 75rem) {
     #googleTrend, #history, #platforms, #simulator, #regulations, #interaction-results {
-        /* Top/Bottom: 6rem (Keep consistent) | Left/Right: 5rem */
         padding: 6rem 12rem; 
     }
     
@@ -405,7 +399,6 @@ p {
 /* FOR LAPTOPS / SMALL DESKTOPS */
 @media screen and (min-width: 62rem) and (max-width: 74.9375rem) {
     #googleTrend, #history, #platforms, #simulator, #regulations, #interaction-results {
-        /* Top/Bottom: 5rem | Left/Right: 3rem */
         padding: 5rem 10rem;
     }
     
@@ -438,7 +431,7 @@ p {
     }
 
     #matches-grid-container {
-        grid-template-columns: 1fr; /* Stack into 1 column */
+        grid-template-columns: 1fr;
     }
 
     .dashboard {
@@ -452,7 +445,7 @@ p {
     /* Transforming the timeline from snake-shape to a vertical list */
     #history .timeline-container {
         width: 100%;
-        padding-left: 3.5rem; /* Space for the dots */
+        padding-left: 3.5rem;
         padding-right: 1rem;
         margin-bottom: 2rem;
     }
