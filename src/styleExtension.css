@@ -1,0 +1,67 @@
+@import url("observablehq:default.css");
+@import url("observablehq:theme-near-midnight.css");
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+html, body {
+    width: 100%;
+    margin: 0;
+    max-width: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    max-width: none;
+}
+
+#observablehq-center {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+#observablehq-main {
+    margin: 0;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+section {
+    margin-bottom: 8rem;
+}
+
+#title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#title-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#history {
+    margin-left: 6rem;
+    margin-right: 6rem;
+    /* adjust to margin auto for smaller screens*/
+    /* margin: auto; */
+}
