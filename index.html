@@ -6,6 +6,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="default.css">
     <link rel="stylesheet" href="styles.css">
     <title>IAT355 Final Project</title>
@@ -29,7 +31,7 @@
     <main>
         <section id="title">
             <div class="video-container">
-                <video src="/IAT355-FinalProject/assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
+                <video src="./assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
             </div>
             <div class="title-text-container">
                 <h1 class="title-text">The Rise of <span>Sports Betting</span></h1>
@@ -41,40 +43,50 @@
 
 
         <section id="history">
+            <h2>An Industry Moving Into the Mainstream</h2>
+            <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. Let's explores how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
+            
+
             <h2>How Sports Betting Became Legal in the United States</h2>
+                <figure class="history-quote">
+                    <blockquote>
+                        “The legalization of sports gambling requires an important policy choice, but the choice is not ours to make. Congress can regulate sports gambling directly, but if it elects not to do so, each state is free to act on its own. Our job is to interpret the law Congress has enacted and decide whether it is consistent with the Constitution. PASPA is not. PASPA “regulate[s] state governments' regulation” of their citizens. The Constitution gives Congress no such power. The judgment of the Third Circuit is reversed.”
+                    </blockquote>
+                    <figcaption>— The U.S. Supreme Court's decision on the Professional and Amateur Sports Protection Act (PASPA) in May 2018</figcaption>
+                </figure>
 
             <div class="timeline">
-                <div class="container left">
+                <div class="timeline-container left">
                     <div class="content">
                     <h3>January 1992</h3>
                     <p>The Professional and Amateur Sports Protection Act of 1992 (PASPA) signed into law; sports betting becomes illegal in the U.S.</p>
                     </div>
                 </div>
-                <div class="container right">
+                <div class="timeline-container right">
                     <div class="content">
                     <h3>November 2011</h3>
                     <p>The Sports Betting Amendment is approved in New Jersey. The measure amends the state constitution to allow the legislature to legalize betting on the results of professional, college, and amateur sporting events. Governor Christie signs the bill on January 17, 2012.</p>
                     </div>
                 </div>
-                <div class="container left">
+                <div class="timeline-container left">
                     <div class="content">
                     <h3>August 2012</h3>
                     <p>The NCAA and four pro sports leagues (the NFL, NBA, NHL, and MLB) sue New Jersey to stop it from offering sports betting after the 2011 referendum, arguing that it violates federal law (i.e., PASPA). A string of court battles ensues.</p>
                     </div>
                 </div>
-                <div class="container right">
+                <div class="timeline-container right">
                     <div class="content">
                     <h3>June 2017</h3>
                     <p>The Supreme Court of the United States takes the case.</p>
                     </div>
                 </div>
-                <div class="container left">
+                <div class="timeline-container left">
                     <div class="content">
                     <h3>December 2017</h3>
                     <p> While New Jersey battles against PASPA, the sports leagues argue for the prohibition of gambling in the state to be upheld</p>
                     </div>
                 </div>
-                <div class="container right">
+                <div class="timeline-container right">
                     <div class="content">
                     <h3>May 2018</h3>
                     <p>The U.S. Supreme Court rules for New Jersey and strikes down PASPA; all states can now legalize sports betting.</p>
@@ -91,13 +103,11 @@
                 states where sports betting is illegal. Intermediate colors represent 
                 partial legalization, such as retail-only or online-only betting.
                 </p>
-                <h3>Different states, different regulations</h3>
+                <h3>Different states, Different regulations</h3>
                 <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
             </div>
 
         </section>
-
-
 
         <section id="googleTrend">
             <h2>Is It Really That Popular?</h2>
@@ -117,15 +127,90 @@
             <p>Lastly, the smallest cut went to the operator's tax obligations to cities, counties, horse racing purses, and other community investments.</p>
         </section>
 
+        <section id="simulator">
+                <div class="mb-4 text-center text-md-start">
+                    <h2 class="fw-bold text-white">Sports Betting Simulator</h2>
+                    <p class="text-secondary">Experience the volatility of sports betting. <em>(Educational Demo Only)</em></p>
+                </div>
+
+                <div class="dashboard mb-4">
+                    <div>
+                        <div class="dashboard-label">Bankroll</div>
+                        <div class="money-display" id="balance-display">$1000.00</div>
+                    </div>
+                    
+                    <div class="text-md-end mt-3 mt-md-0">
+                        <div class="dashboard-label">Net Profit/Loss</div>
+                        <div class="net-profit" id="profit-display">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="controls mb-4">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <label for="wager-amount" class="text-white fw-bold">Wager Amount ($):</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="number" id="wager-amount" class="custom-input" value="50" min="10" max="1000">
+                        </div>
+                        <div class="col-auto">
+                            <span class="small text-secondary">*Click a match button below to bet</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="matches-grid-container"></div>
+        </section>
+
         <section id="regulations">
-            <h2>Regulating the 'Sport'</h2>
+            <h2>Public Opinion in the U.S.</h2>
             <p>When it comes to public opinion on sports betting, it seems that most Americans have sided with the courts. In 2019, the majority of the U.S. public supported the legalization of sports betting in their respective states. Although, as has been previously shown, while sports betting has been met with considerable approval, the legislation is yet to catch up.</p>
-            <p>Some of the perks of legalizing sports betting include the following: ▪ Economic benefits ▪ The potential to win money ▪ An added element of excitement when watching sports However, sports betting has not yet gained the full support of the U.S. public. There is still a way to go for the industry to win over the whole of the country, particularly the more conservative states. Some of the concerns of legalizing sports betting include the following: ▪ Match-fixing ▪ Gambling addiction ▪ It shifts the focus away from the sport itself With that in mind, the upcoming pages will expand further on the perception and participation of sports betting in the United States.</p>
+            <p>Some of the perks of legalizing sports betting include the following:</p>
+
+            <ul class="bulletpoint-list">
+                <li>Economic benefits</li>
+                <li>The potential to win money</li>
+                <li>An added element of excitement when watching sports</li>
+            </ul>
+
+            <p>
+                However, sports betting has not yet gained the full support of the U.S. public. 
+                There is still a way to go for the industry to win over the whole of the country, 
+                particularly the more conservative states.
+            </p>
+
+            <p>Some of the concerns of legalizing sports betting include the following:</p>
+
+            <ul class="bulletpoint-list negative">
+                <li>Match-fixing</li>
+                <li>Gambling addiction</li>
+                <li>It shifts the focus away from the sport itself</li>
+            </ul>
+
+            <p>
+                With that in mind, the upcoming pages will expand further on the perception and 
+                participation of sports betting in the United States.
+            </p>
         </section>
 
         <section id="interaction-results">
-            <h2>results</h2>
+            <h2>Results</h2>
+                <div id="reality-check" class="reality-check mt-4">
+                    <strong>Note:</strong> Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.
+                </div>
+
+                <div class="history-log mt-4">
+                    <h4 class="h5 text-white mb-3">Betting History</h4>
+                    <div id="history-list"></div>
+                </div>
         </section>
     </main>
+
+    <script src="./js/sportsBettingSimulator.js"></script>
 </body>
+
+<footer>
+
+</footer>
+
 </html>
