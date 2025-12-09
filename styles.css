@@ -266,6 +266,31 @@ p {
 }
 
 
+/* REGULATIONS */
+.bulletpoint-list {
+    margin: 1.25rem 0 2.5rem 1.25rem;
+    padding-left: 1.25rem;
+    font-family: "DM Sans", system-ui;
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+.bulletpoint-list li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 0.75rem;
+}
+
+.bulletpoint-list li::marker {
+    color: var(--green);
+    font-weight: bold;
+}
+
+/* For the negative list (concerns) */
+.bulletpoint-list.negative li::marker {
+    color: var(--red);
+}
+
 /* Dashboard */
 .dashboard {
     background: var(--primary);
