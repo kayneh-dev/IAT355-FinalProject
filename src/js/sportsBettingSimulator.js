@@ -46,20 +46,25 @@
                 </div>
 
                 <div class="bet-buttons">
-                    <button class="bet-btn" onclick="placeBet(${match.id}, 'A')">
+                    <button class="bet-btn">
                         <span class="teams">${match.teamA}</span><br>
                         <span class="odds-val">${match.oddsA.toFixed(2)}</span>
                         <span class="potential-payout" id="payout-${match.id}-A">Payout: $0.00</span>
                     </button>
-                    <button class="bet-btn" onclick="placeBet(${match.id}, 'B')">
+                    <button class="bet-btn">
                         <span class="teams">${match.teamB}</span><br>
                         <span class="odds-val">${match.oddsB.toFixed(2)}</span>
                         <span class="potential-payout" id="payout-${match.id}-B">Payout: $0.00</span>
                     </button>
                 </div>
             `;
-            matchesContainer.appendChild(card);
-        });
+            const buttonA = card.querySelector(".bet-btn:nth-child(1)");
+            const buttonB = card.querySelector(".bet-btn:nth-child(2)");
+
+            buttonA.addEventListener("click", () => placeBet(match.id, "A"));
+            buttonB.addEventListener("click", () => placeBet(match.id, "B"));
+                matchesContainer.appendChild(card);
+            });
         
         // Update earnings
         updatePotentialEarnings();

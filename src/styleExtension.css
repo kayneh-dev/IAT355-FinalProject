@@ -71,6 +71,10 @@ section {
     text-align: center;
 }
 
+#title-text span {
+    font-style: italic;
+}
+
 #history, #trend, #platforms, #regulations, #results, #simulator {
     margin-left: 6rem;
     margin-right: 6rem;
@@ -328,4 +332,31 @@ section {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* History Log */
+.history-log {
+    background: var(--primary);
+    padding: 20px;
+    border-radius: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--secondary);
+}
+
+.log-entry {
+    border-bottom: 1px solid var(--secondary);
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Reality Check Warning */
+.reality-check {
+    background: #451a03;
+    border-left: 4px solid #f59e0b;
+    padding: 15px;
+    color: #fef3c7;
+    border-radius: 6px;
+    display: none;
 }
