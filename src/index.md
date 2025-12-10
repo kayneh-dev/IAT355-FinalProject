@@ -40,9 +40,21 @@ style: styleExtension.css
 ```
 
 ```js
-function mapPlot(data, {width}) {
+const stateFilterInput = Inputs.select(["All", "Illegal", "Retail only", "Online only", "Legal"],
+{label: "Filter by legality", value: "All"});
+
+const stateFilter = Generators.input(stateFilterInput);
+
+let filteredData = stateFilter === "All"
+  ? mapData
+  : mapData.filter(d => d.Legality === stateFilter)
+```
+
+```js
+function mapPlot({width}) {
     return Plot.plot({
         projection: "albers-usa",
+        title: "Legality of Sports Betting Within U.S. States",
         width,
         height: 600,
         color: {
@@ -53,13 +65,14 @@ function mapPlot(data, {width}) {
             label: "Sports betting status (2025)",
         },
         marks: [
-            Plot.geo(data, {
+            Plot.geo(mapData, {
                 fill: "Legality",
                 stroke: "white",
                 strokeWidth: 0.7,
                 title: d => `${d.States}: ${d.Legality}`,
-                tip: true
-            })
+                opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25
+            }),
+            Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
         ]
     });
 }
@@ -107,9 +120,10 @@ function mapPlot(data, {width}) {
     </div>
     <div class="grid grid-cols-1">
         <div class="card">${
-            resize((width) => mapPlot(mapData, {width}))
+            resize((width) => mapPlot({width}))
         }</div>
     </div>
+    <div class="card grid-colspan-1 grid-rowspan-1">${stateFilterInput}</div>
     <div id="history-text"> 
         <p class="chart-description" style="text-wrap: none;">
         Blue indicates states where sports betting is fully legal. Red indicates 
@@ -135,7 +149,7 @@ function searchTrend(data, {width}){
     }));
     return Plot.plot({
         width,
-        title: "The search trend in the topic of Sports Betting",
+        title: "Google Search trends for 'Sports Betting'",
         x: {
             label: "Year",
             type: "time"
@@ -156,8 +170,7 @@ function searchTrend(data, {width}){
             Plot.linearRegressionY(transformedData, {
                 x: "Date",
                 y: "Interest",
-                stroke: "red",
-                strokeWidth: 2
+                stroke: "orange",
             })
         ]
     });
