@@ -70,9 +70,9 @@ function mapPlot({width}) {
                 stroke: "white",
                 strokeWidth: 0.7,
                 title: d => `${d.States}: ${d.Legality}`,
-                tip: true,
                 opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25
-            })
+            }),
+            Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
         ]
     });
 }
@@ -123,9 +123,7 @@ function mapPlot({width}) {
             resize((width) => mapPlot({width}))
         }</div>
     </div>
-    <div class="grid grid-cols-4">
-        <div class="card">${stateFilterInput}</div>
-    </div>
+    <div class="card grid-colspan-1 grid-rowspan-1">${stateFilterInput}</div>
     <div id="history-text"> 
         <p class="chart-description" style="text-wrap: none;">
         Blue indicates states where sports betting is fully legal. Red indicates 
