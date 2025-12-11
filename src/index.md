@@ -79,7 +79,9 @@ function mapPlot({width}) {
 ```
 
 <section id="history">
+    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
     <h1>How Sports Betting Became Legal in the United States</h1>
+    <!-- <h1>How Sports Betting Became Legal in the United States</h1>
     <div class="timeline">
         <div class="timeline-container left">
             <div class="content">
@@ -117,20 +119,15 @@ function mapPlot({width}) {
             <p>The U.S. Supreme Court rules for New Jersey and strikes down PASPA; all states can now legalize sports betting.</p>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="card grid grid-cols-1 grid-rows-4">
         <div class="grid-colspan-1 grid-rowspan-4">${
             resize((width) => mapPlot({width}))
         }</div>
         <h3>${stateFilterInput}</h3>
     </div>
-    <div id="history-text"> 
-        <p class="chart-description" style="text-wrap: none;">
-        Blue indicates states where sports betting is fully legal. Red indicates 
-        states where sports betting is illegal. Intermediate colors represent 
-        partial legalization, such as retail-only or online-only betting.
-        </p>
-        <h3>Different states, different regulations</h3>
+    <div class="history-text">
+        <h2>Different states, different regulations</h2>
         <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
     </div>
 </section>
@@ -292,11 +289,12 @@ const getStartEnd = () => startEnd.value;
 <section id="regulations">
     <h1>Regulating the 'Sport'</h1>
     <p>When it comes to public opinion on sports betting, it seems that most Americans have sided with the courts. In 2019, the majority of the U.S. public supported the legalization of sports betting in their respective states. Although, as has been previously shown, while sports betting has been met with considerable approval, the legislation is yet to catch up.</p>
-    <p>Some of the perks of legalizing sports betting include the following: ▪ Economic benefits ▪ The potential to win money ▪ An added element of excitement when watching sports However, sports betting has not yet gained the full support of the U.S. public. There is still a way to go for the industry to win over the whole of the country, particularly the more conservative states. Some of the concerns of legalizing sports betting include the following: ▪ Match-fixing ▪ Gambling addiction ▪ It shifts the focus away from the sport itself With that in mind, the upcoming pages will expand further on the perception and participation of sports betting in the United States.</p>
-    <div class="grid grid-cols-1">
-    <!-- <div class="card">${
-        resize((width) => revenuePlot({width}))
-    }</div> -->
+    <p>Some of the perks of legalizing sports betting include the following:</p>
+    <ul class="bulletpoint-list">
+        <li>Economic benefits</li>
+        <li>The potential to win money</li>
+        <li>An added element of excitement when watching sports</li>
+    </ul>
 </div>
 
 <div class="grid">
@@ -427,6 +425,7 @@ const getStartEnd = () => startEnd.value;
         width,
         height,
         marginLeft: 80,
+        marginBottom: 80,
         color: {legend: true, scheme: "RdYlBu",},
         y: {grid: true, label: "Revenue (USD)"},
         marks: [
@@ -436,12 +435,26 @@ const getStartEnd = () => startEnd.value;
     )}</div>
   </div>
 </div>
+    <p>
+        However, sports betting has not yet gained the full support of the U.S. public. 
+        There is still a way to go for the industry to win over the whole of the country, 
+        particularly the more conservative states.
+    </p>
+    <ul class="bulletpoint-list negative">
+        <li>Match-fixing</li>
+        <li>Gambling addiction</li>
+        <li>It shifts the focus away from the sport itself</li>
+    </ul>
+    <p>In Canada, more than 40 senators have written in a letter to Prime Minister Mark Carney to urge his federal government to ban all sports betting advertising in Canada.</p>
+    <div class="note" label="Sen. Marty Deacon and Sen. Percy Downe" style="max-width: none;">
+        <p>“We are asking for a ban on all advertising for sports gambling apps and websites,” stated the letter. “Such a measure would be similar to the advertising ban for cigarettes, and for the same reason: to address a public health problem.”</p>
+    </div>
 </section>
 
 <section id="results">
     <h1>Results</h1>
-    <div id="reality-check" class="reality-check mt-4">
-    <strong>Note:</strong> Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.
+    <div class="warning" label="Note" style="max-width: none;">
+        <p>Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.</p>
     </div>
     <div class="history-log mt-4">
         <h4 class="h5 text-white mb-3">Betting History</h4>
