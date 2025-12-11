@@ -51,7 +51,7 @@ video {
 }
 
 section {
-    margin-bottom: 8rem;
+    margin-bottom: 4rem;
 }
 
 #title {
@@ -359,4 +359,30 @@ section {
     color: #fef3c7;
     border-radius: 6px;
     display: none;
+}
+
+@container (min-width: 560px) {
+  .grid-cols-2-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid-cols-2-3 .grid-colspan-2 {
+    grid-column: span 2;
+  }
+}
+
+@container (min-width: 840px) {
+  .grid-cols-2-3 {
+    grid-template-columns: 1fr 2fr;
+    grid-auto-flow: column;
+  }
+}
+
+.bulletpoint-list li::marker {
+    color: var(--green);
+    font-weight: bold;
+}
+
+/* For the negative list (concerns) */
+.bulletpoint-list.negative li::marker {
+    color: var(--red);
 }

@@ -79,7 +79,9 @@ function mapPlot({width}) {
 ```
 
 <section id="history">
+    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
     <h1>How Sports Betting Became Legal in the United States</h1>
+    <!-- <h1>How Sports Betting Became Legal in the United States</h1>
     <div class="timeline">
         <div class="timeline-container left">
             <div class="content">
@@ -117,20 +119,15 @@ function mapPlot({width}) {
             <p>The U.S. Supreme Court rules for New Jersey and strikes down PASPA; all states can now legalize sports betting.</p>
             </div>
         </div>
-    </div>
-    <div class="grid grid-cols-1">
-        <div class="card">${
+    </div> -->
+    <div class="card grid grid-cols-1 grid-rows-4">
+        <div class="grid-colspan-1 grid-rowspan-4">${
             resize((width) => mapPlot({width}))
         }</div>
+        <h3>${stateFilterInput}</h3>
     </div>
-    <div class="card grid-colspan-1 grid-rowspan-1">${stateFilterInput}</div>
-    <div id="history-text"> 
-        <p class="chart-description" style="text-wrap: none;">
-        Blue indicates states where sports betting is fully legal. Red indicates 
-        states where sports betting is illegal. Intermediate colors represent 
-        partial legalization, such as retail-only or online-only betting.
-        </p>
-        <h3>Different states, different regulations</h3>
+    <div class="history-text">
+        <h2>Different states, different regulations</h2>
         <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
     </div>
 </section>
@@ -150,6 +147,7 @@ function searchTrend(data, {width}){
     return Plot.plot({
         width,
         title: "Google Search trends for 'Sports Betting'",
+        subtitle: "Searches from the past 2 decades",
         x: {
             label: "Year",
             type: "time"
@@ -162,8 +160,7 @@ function searchTrend(data, {width}){
                 x: "Date",
                 y: "Interest",
                 stroke: "steelblue",
-                curve: "monotone-x",
-                marker: true,
+                curve: "step",
                 tip: true,
             }),
 
@@ -230,18 +227,34 @@ function searchTrend(data, {width}){
 
 
 ```js
-const dataset = await FileAttachment("./csv_Files/state_revenue7.csv").csv();
+const revenueDataset = await FileAttachment("./csv_Files/state_revenue7.csv").csv();
+const transformedRevenueData = revenueDataset.map(d => ({
+    ...d,
+    Revenue: +d.Revenue,
+    Date: new Date(d.Date)
+}));
+transformedRevenueData.sort((a, b) => a.Date - b.Date);
+
+const stateRevenueTotals = d3.rollup(
+    transformedRevenueData,
+    v => d3.sum(v, d => d.Revenue),
+    d => d.State
+);
+
+const [maxRevenueState, maxRevenue] = d3.greatest(
+    stateRevenueTotals.entries(),
+    ([state, revenue]) => revenue
+)
+
+const top5States = Array.from(stateRevenueTotals.entries())
+  .sort((a, b) => d3.descending(a[1], b[1]))
+  .slice(0, 5);
+
+console.log(top5States);
 ```
 
 ```js
-function revenuePlot(data, {width}) {
-    const transformedData = data.map(d => ({
-        ...d,
-        Revenue: +d.Revenue,
-        Date: new Date(d.Date)
-    }));
-    transformedData.sort((a, b) => a.Date - b.Date);
-
+function revenuePlot({width}) {
     return Plot.plot({
         title: "Sports Betting Revenue by State",
         subtitle: "My Subtitle",
@@ -251,7 +264,7 @@ function revenuePlot(data, {width}) {
         x: {grid: true, label: "Year"},
         color: {legend: true, scheme: "RdYlBu"},
         marks: [
-            Plot.lineY(transformedData, 
+            Plot.lineY(transformedRevenueData, 
                 {
                     x: "Date",
                     y: "Revenue",
@@ -266,23 +279,182 @@ function revenuePlot(data, {width}) {
     });
 }
 ```
-
+```js
+const defaultStartEnd = [transformedRevenueData.at(-53).Date, transformedRevenueData.at(-1).Date];
+const startEnd = Mutable(defaultStartEnd);
+const setStartEnd = (se) => startEnd.value = (se ?? defaultStartEnd);
+const getStartEnd = () => startEnd.value;
+```
 
 <section id="regulations">
     <h1>Regulating the 'Sport'</h1>
     <p>When it comes to public opinion on sports betting, it seems that most Americans have sided with the courts. In 2019, the majority of the U.S. public supported the legalization of sports betting in their respective states. Although, as has been previously shown, while sports betting has been met with considerable approval, the legislation is yet to catch up.</p>
-    <p>Some of the perks of legalizing sports betting include the following: ▪ Economic benefits ▪ The potential to win money ▪ An added element of excitement when watching sports However, sports betting has not yet gained the full support of the U.S. public. There is still a way to go for the industry to win over the whole of the country, particularly the more conservative states. Some of the concerns of legalizing sports betting include the following: ▪ Match-fixing ▪ Gambling addiction ▪ It shifts the focus away from the sport itself With that in mind, the upcoming pages will expand further on the perception and participation of sports betting in the United States.</p>
-    <div class="grid grid-cols-1">
-    <div class="card">${
-        resize((width) => revenuePlot(dataset, {width}))
-    }</div>
+    <p>Some of the perks of legalizing sports betting include the following:</p>
+    <ul class="bulletpoint-list">
+        <li>Economic benefits</li>
+        <li>The potential to win money</li>
+        <li>An added element of excitement when watching sports</li>
+    </ul>
 </div>
+
+<div class="grid">
+    <div class="card">
+        <h2>Sports Betting Revenue by State (2018-2022)</h2>
+        <h3>Drag to zoom</h3><br>
+        ${resize((width) =>
+        Plot.plot({
+            width,
+            marginLeft: 80,
+            color: {legend: true, scheme: "RdYlBu",},
+            y: {grid: true, label: "Revenue (USD)"},
+            marks: [
+                Plot.ruleY([0]),
+                Plot.lineY(transformedRevenueData, {x: "Date", y: "Revenue", stroke: "State", tip: true, curve: "monotone-x", markerEnd: true}),
+                (index, scales, channels, dimensions, context) => {
+                    const x1 = dimensions.marginLeft;
+                    const y1 = 0;
+                    const x2 = dimensions.width - dimensions.marginRight;
+                    const y2 = dimensions.height;
+                    const brushed = (event) => {
+                    if (!event.sourceEvent) return;
+                    let {selection} = event;
+                    if (!selection) {
+                        const r = 10; // radius of point-based selection
+                        let [px] = d3.pointer(event, context.ownerSVGElement);
+                        px = Math.max(x1 + r, Math.min(x2 - r, px));
+                        selection = [px - r, px + r];
+                        g.call(brush.move, selection);
+                    }
+                    setStartEnd(selection.map(scales.x.invert));
+                    };
+                    const pointerdowned = (event) => {
+                    const pointerleave = new PointerEvent("pointerleave", {bubbles: true, pointerType: "mouse"});
+                    event.target.dispatchEvent(pointerleave);
+                    };
+                    const brush = d3.brushX().extent([[x1, y1], [x2, y2]]).on("brush end", brushed);
+                    const g = d3.create("svg:g").call(brush);
+                    g.call(brush.move, getStartEnd().map(scales.x));
+                    g.on("pointerdown", pointerdowned);
+                    return g.node();
+                },
+            ]
+            })
+            )}
+        </div>
+    </div>
+<div class="grid grid-cols-2-3" style="margin-top: 2rem;">
+  <div class="card">
+    <h2 style="margin-bottom: 1rem;">Highest Earning States <span class="muted">(Cumulative)</span></h2>
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <h1>1. ${top5States[0][0]}</h1>
+                    <h1>$${top5States[0][1].toLocaleString("en-US")} <span class="muted">USD</span></h1>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top: 0.5rem;">
+                    <h2>2. ${top5States[1][0]}</h2>
+                    <h2>$${top5States[1][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="margin-top: 0.5rem;">
+                    <h2>3. ${top5States[2][0]}</h2>
+                    <h2>$${top5States[2][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="grid grid-cols-2" style="margin-top: 0.5rem;">
+                    <div>
+                        <h3>3. ${top5States[3][0]}</h3>
+                        <h3>$${top5States[3][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
+                    </div>
+                    <div>
+                        <h3>4. ${top5States[4][0]}</h3>
+                        <h3>$${top5States[4][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+  </div>
+  <div class="card">
+    <div>
+        <h2 style="margin-bottom: 1rem;">Notable Dates</h2>
+    </div>
+    <div class="grid grid-cols-2">
+        <div>
+            <h2>February/March</h2>
+            <ul>
+                <li><h2>Super Bowl <span class="muted">(NFL)</span></h2></li>
+                <li><h2>All-Star Weekend <span class="muted">(NBA)</span></h2></li>
+                <li><h2>March Madness <span class="muted">(College Basketball)</span></h2></li>
+                <li><h2>All-Star Weekend <span class="muted">(NBA)</span></h2></li>
+            </ul>
+        </div>
+        <div>
+            <h2>June/August</h2>
+            <ul>
+                <li><h2>NBA Finals <span class="muted">(NBA)</span></h2></li>
+                <li><h2>Stanley Cup Finals <span class="muted">(NHL)</span></h2></li>
+                <li><h2>US Open <span class="muted">(Tennis)</span></h2></li>
+            </ul>
+        </div>
+        <div>
+            <h2>September/October</h2>
+            <ul>
+            <li><h2>Start of NFL Season</h2></li>
+            <li><h2>Start of NBA Season</h2></li>
+            <li><h2>MLB Playoffs/World Series <span class="muted">(MLB)</span></h2></li>
+            </ul>
+        </div>
+    </div>
+  </div>
+  <div class="card grid-colspan-2 grid-rowspan-2" style="display: flex; flex-direction: column;">
+    <h2>Revenue ${startEnd === defaultStartEnd ? "over the past year" : startEnd.map((d) => d.toLocaleDateString("en-US")).join("–")}</h2><br>
+    <div style="flex-grow: 1;">${resize((width, height) =>
+      Plot.plot({
+        width,
+        height,
+        marginLeft: 80,
+        marginBottom: 80,
+        color: {legend: true, scheme: "RdYlBu",},
+        y: {grid: true, label: "Revenue (USD)"},
+        marks: [
+          Plot.lineY(transformedRevenueData.filter((d) => startEnd[0] <= d.Date && d.Date < startEnd[1]), {x: "Date", y: "Revenue", stroke: "State", tip: true, curve: "monotone-x",markerEnd: true})
+        ]
+      })
+    )}</div>
+  </div>
+</div>
+    <p>
+        However, sports betting has not yet gained the full support of the U.S. public. 
+        There is still a way to go for the industry to win over the whole of the country, 
+        particularly the more conservative states.
+    </p>
+    <ul class="bulletpoint-list negative">
+        <li>Match-fixing</li>
+        <li>Gambling addiction</li>
+        <li>It shifts the focus away from the sport itself</li>
+    </ul>
+    <p>In Canada, more than 40 senators have written in a letter to Prime Minister Mark Carney to urge his federal government to ban all sports betting advertising in Canada.</p>
+    <div class="note" label="Sen. Marty Deacon and Sen. Percy Downe" style="max-width: none;">
+        <p>“We are asking for a ban on all advertising for sports gambling apps and websites,” stated the letter. “Such a measure would be similar to the advertising ban for cigarettes, and for the same reason: to address a public health problem.”</p>
+    </div>
 </section>
 
 <section id="results">
     <h1>Results</h1>
-    <div id="reality-check" class="reality-check mt-4">
-    <strong>Note:</strong> Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.
+    <div class="warning" label="Note" style="max-width: none;">
+        <p>Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.</p>
     </div>
     <div class="history-log mt-4">
         <h4 class="h5 text-white mb-3">Betting History</h4>
