@@ -189,6 +189,7 @@ section {
     width: 100%;
     max-width: 75rem;
     margin: 0 auto;
+    padding-bottom: 3rem;
 }
 
 /* Headers */
@@ -217,7 +218,7 @@ section {
     background: var(--bg-dark);
     padding: 1.25rem;
     border-radius: 0.75rem;
-    border: 1px solid var(--secondary);
+    border: 0.063rem solid var(--secondary);
     box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: space-between;
@@ -236,9 +237,9 @@ section {
 }
 .suggestion-box {
     background: #e0f2fe;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    padding: 0.625rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.625rem;
     color: #0369a1;
     font-size: 0.9rem;
 }
@@ -300,7 +301,7 @@ section {
 
 .match-card {
     background: var(--primary);
-    border: 2px solid var(--secondary);
+    border: 0.125rem solid var(--secondary);
     border-radius: 0.75rem;
     padding: 1.25rem;
     display: flex;
@@ -356,7 +357,7 @@ section {
 .bet-btn {
     flex: 1;
     background: transparent;
-    border: 2px solid var(--secondary);
+    border: 0.125rem solid var(--secondary);
     color: #cbd5e1;
     padding: 0.625rem;
     border-radius: 0.5rem;
@@ -391,7 +392,7 @@ section {
 /* Inputs */
 .custom-input {
     background: var(--primary);
-    border: 1px solid var(--secondary);
+    border: 0.063rem solid var(--secondary);
     color: var(--text);
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
@@ -400,7 +401,7 @@ section {
 
 .btn-reset {
     background: transparent;
-    border: 1px solid var(--red);
+    border: 0.063rem solid var(--red);
     color: var(--red);
     padding: 0.3125rem 0.625rem;
     border-radius: 0.3125rem;
@@ -472,6 +473,15 @@ section {
     margin-bottom: 1.5rem;
 }
 
+.bankroll-chart-box {
+    display: none;
+    background: var(--bg-white);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    border: 0.063rem solid var(--secondary);
+    margin-bottom: 3rem;
+}
+
 /* =========================================
    8. SIMULATOR: LOGS & RECEIPTS
    ========================================= */
@@ -500,9 +510,9 @@ section {
     background: var(--bg-white);
     color: var(--secondary);
     padding: 1.25rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     border-radius: 0.75rem;
-    border: 1px solid var(--secondary);
+    border: 0.063rem solid var(--secondary);
     font-family: 'Roboto Mono', monospace;
 }
 
@@ -515,13 +525,13 @@ section {
 }
 
 .sim-log-header {
-    border-bottom: 1px solid var(--text-shaded);
+    border-bottom: 0.063rem solid var(--text-shaded);
     padding-bottom: 0.625rem;
 }
 
 .receipt-header {
     text-align: center;
-    border-bottom: 2px dashed #9ca3af;
+    border-bottom: 0.125rem dashed #9ca3af;
     padding-bottom: 0.9375rem;
     margin-bottom: 0.9375rem;
     font-weight: bold;
@@ -544,7 +554,7 @@ section {
 
 /* Rows & Text */
 .log-entry {
-    border-bottom: 1px solid var(--text-shaded);
+    border-bottom: 0.063rem solid var(--text-shaded);
     padding: 0.5rem 0;
     display: flex;
     justify-content: space-between;
@@ -569,7 +579,7 @@ section {
 }
 
 .receipt-divider { 
-    border-top: 2px dashed #9ca3af;
+    border-top: 0.125rem dashed #9ca3af;
     margin: 0.9375rem 0;
 }
 .sim-text-secondary { 

@@ -429,7 +429,7 @@ function BettingSimulator() {
   container.innerHTML = `
     <div class="sim-header-section">
         <h2></h2>
-        <p class="sim-subtitle">Experience the volatility of sports betting. (Educational Demo Only)</p>
+        <p class="sim-subtitle">Experience the volatility of sports betting. <em>(Educational Demo Only)</em></p>
     </div>
 
     <div class="sim-dashboard">
@@ -457,16 +457,11 @@ function BettingSimulator() {
 
         <div id="math-breakdown" class="math-box hidden">
             <h5 class="sim-math-header">How American Odds Work:</h5>
-            
             <div class="suggestion-box">
                 <span id="american-concept"></span>
             </div>
-
-            <p class="sim-formula-text" id="formula-text">
-                </p>
-
+            <p class="sim-formula-text" id="formula-text"></p>
             <div class="wager-formula" id="math-step-1"></div>
-            
             <div class="math-result-row">
                 <span>To Return:</span>
                 <span id="math-total-return"><strong>$0.00</strong></span>
@@ -495,18 +490,14 @@ function BettingSimulator() {
         <div class="sim-col">
             <div class="receipt-container">
                 <h3 class="receipt-header">Bet Slip Receipt</h3>
-                
                 <div class="sim-receipt-row">
                     <span>Current Bankroll</span>
                     <strong id="receipt-bankroll" class="sim-bankroll-val">$1000.00</strong>
                 </div>
-                
                 <div id="receipt-games-list" class="sim-scroll-list">
                     <div class="sim-placeholder">No bets placed yet.</div>
                 </div>
-
                 <div class="receipt-divider"></div>
-
                 <div>
                     <div class="sim-receipt-row">
                         <span>User Net Profit:</span>
@@ -524,6 +515,9 @@ function BettingSimulator() {
             </div>
         </div>
     </div>
+
+    <h3 class="sim-results-title" id="chart-title" style="display: none;">Bankroll Performance</h3>
+    <div id="bankroll-chart" class="bankroll-chart-box"></div>
   `;
 
   // --- LOGIC ---
@@ -536,10 +530,10 @@ function BettingSimulator() {
   let totalPayouts = 0;
   let gameHistory = [];
   let matchPicks = {}; 
+  let balanceHistory = [{ bet: 0, balance: 1000 }];
 
-  // --- UPDATED MATCH DATA TO AMERICAN ODDS ---
   const matches = [
-    { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: -110, oddsB: -110, chanceA: 0.50 },
+    { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: -150, oddsB: +130, chanceA: 0.58 },
     { id: 2, sport: "NFL", teamA: "Chiefs", teamB: "Raiders", oddsA: -300, oddsB: +240, chanceA: 0.75 },
     { id: 3, sport: "MLB", teamA: "Yankees", teamB: "Red Sox", oddsA: -135, oddsB: +115, chanceA: 0.55 },
     { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Chandler", oddsA: +150, oddsB: -175, chanceA: 0.38 },
@@ -557,40 +551,63 @@ function BettingSimulator() {
   const mathStep1 = container.querySelector('#math-step-1');
   const mathTotalReturn = container.querySelector('#math-total-return');
   const selectedMatchLabel = container.querySelector('#selected-match-label');
-  
   const americanConcept = container.querySelector('#american-concept');
   const formulaText = container.querySelector('#formula-text');
-
   const receiptBankroll = container.querySelector('#receipt-bankroll');
   const receiptGamesList = container.querySelector('#receipt-games-list');
   const receiptUserProfit = container.querySelector('#receipt-user-profit');
   const receiptAppRev = container.querySelector('#receipt-app-rev');
   const receiptGovTax = container.querySelector('#receipt-gov-tax');
+  const chartContainer = container.querySelector('#bankroll-chart');
+  const chartTitle = container.querySelector('#chart-title');
 
-  // --- HELPER: FORMAT AMERICAN ODDS STRING ---
   function formatOdds(odds) {
     return odds > 0 ? `+${odds}` : `${odds}`;
   }
 
-  // --- HELPER: CALCULATE PAYOUT (AMERICAN LOGIC) ---
   function calculatePayout(wager, odds) {
     let profit = 0;
     if (odds > 0) {
-        // Positive: (Wager * Odds) / 100
         profit = wager * (odds / 100);
     } else {
-        // Negative: (Wager * 100) / Positive Odds
         profit = wager * (100 / Math.abs(odds));
     }
-    return {
-        profit: profit,
-        total: profit + wager
-    };
+    return { profit: profit, total: profit + wager };
+  }
+
+  function renderChart() {
+    if(!chartContainer) return;
+    chartContainer.innerHTML = ''; 
+
+    const chart = Plot.plot({
+        width: chartContainer.clientWidth, 
+        height: 300,
+        marginRight: 40,
+        marginLeft: 60,
+        marginTop: 40,
+        marginBottom: 50,
+        grid: true,
+        style: {
+            backgroundColor: "transparent",
+            color: "#334155", 
+            fontSize: "12px"
+        },
+        x: { label: "Bets Placed" },
+        y: { 
+            label: "Bankroll ($)", 
+            tickFormat: (d) => `$${d.toFixed(0)}` 
+        },
+        marks: [
+            Plot.lineY(balanceHistory, {x: "bet", y: "balance", stroke: "#3b82f6", strokeWidth: 3}),
+            Plot.dot(balanceHistory, {x: "bet", y: "balance", fill: "#171716", stroke: "#3b82f6", strokeWidth: 2, tip: true}),
+            Plot.ruleY([1000], {stroke: "#ef4444", strokeDasharray: "4,4", opacity: 0.5})
+        ]
+    });
+    chartContainer.appendChild(chart);
   }
 
   function renderMatches() {
     matchesContainer.innerHTML = '';
-    
     matches.forEach(match => {
         const card = document.createElement('div');
         const isSelected = match.id === selectedMatchId ? 'selected' : '';
@@ -598,9 +615,7 @@ function BettingSimulator() {
         
         card.addEventListener('click', (e) => {
             if (e.target.closest('button')) return; 
-            
             selectedMatchId = (selectedMatchId === match.id) ? null : match.id;
-            
             if(selectedMatchId) {
                 mathBox.classList.remove('hidden');
             } else {
@@ -651,7 +666,6 @@ function BettingSimulator() {
             btnContainer.appendChild(btnB);
             card.appendChild(btnContainer);
         }
-
         matchesContainer.appendChild(card);
     });
   }
@@ -682,20 +696,16 @@ function BettingSimulator() {
     const teamName = isPickA ? match.teamA : match.teamB;
     const odds = isPickA ? match.oddsA : match.oddsB;
     
-    // Calculate Payout using new Logic
     const result = calculatePayout(wager, odds);
     
     selectedMatchLabel.textContent = `Viewing calculation for ${teamName}`;
     mathTotalReturn.innerHTML = `<strong>$${result.total.toFixed(2)}</strong>`;
 
-    // Dynamic Math Breakdown based on + or -
     if (odds > 0) {
-        // Positive Logic
         americanConcept.innerHTML = `This team is an <strong>Underdog (${formatOdds(odds)})</strong>. A $100 bet wins you $${odds} profit.`;
         formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; Odds / 100) + Wager`;
         mathStep1.innerHTML = `($${wager} &times; ${odds} / 100) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
     } else {
-        // Negative Logic
         americanConcept.innerHTML = `This team is a <strong>Favorite (${odds})</strong>. You must bet $${Math.abs(odds)} just to win $100 profit.`;
         formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; 100 / Odds) + Wager`;
         mathStep1.innerHTML = `($${wager} &times; 100 / ${Math.abs(odds)}) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
@@ -728,7 +738,6 @@ function BettingSimulator() {
     totalWagered += wager; 
     let profitAmt = -wager; 
 
-    // New Payout Logic
     const result = calculatePayout(wager, odds);
 
     if (won) {
@@ -745,10 +754,18 @@ function BettingSimulator() {
     }
     
     betCount++;
+    balanceHistory.push({ bet: betCount, balance: balance });
+
     updateUI();
     updateReceipt();
     renderMatches();
     
+    if (betCount === 1) {
+        chartContainer.style.display = "block";
+        chartTitle.style.display = "block";
+    }
+    renderChart();
+
     if (betCount === 5 || lossStreak >= 3) {
         realityCheck.style.display = "block";
     }
@@ -765,20 +782,16 @@ function BettingSimulator() {
   function updateReceipt() {
     receiptBankroll.textContent = `$${balance.toFixed(2)}`;
     receiptGamesList.innerHTML = '';
-    
     gameHistory.forEach(game => {
         const row = document.createElement('div');
         row.className = 'sim-receipt-row'; 
-        
         const resultClass = game.result === 'Win' ? 'text-win' : 'text-loss';
         row.innerHTML = `<span>${game.name} (${game.result})</span><span class="${resultClass}">${game.val >= 0 ? '+' : ''}$${game.val.toFixed(0)}</span>`;
         receiptGamesList.appendChild(row);
     });
-
     const userProfit = balance - initialBalance;
     receiptUserProfit.textContent = `${userProfit >= 0 ? '+' : ''}$${userProfit.toFixed(2)}`;
     receiptUserProfit.style.color = userProfit >= 0 ? '#10b981' : '#ef4444';
-
     const appRevenue = totalWagered - totalPayouts;
     receiptAppRev.textContent = `${appRevenue >= 0 ? '+' : ''}$${appRevenue.toFixed(2)}`;
     const tax = totalWagered * 0.0025; 
@@ -788,7 +801,6 @@ function BettingSimulator() {
   function logResult(team, wager, profit, won) {
     const placeholder = historyList.querySelector('#log-placeholder');
     if (placeholder) placeholder.remove();
-
     const entry = document.createElement('div');
     entry.className = 'log-entry';
     entry.innerHTML = `<span>Bet on <strong>${team}</strong> ($${wager})</span><span class="${won ? 'text-win' : 'text-loss'}">${won ? 'WIN' : 'LOSS'} (${profit >= 0 ? '+' : ''}${profit.toFixed(2)})</span>`;
@@ -805,6 +817,8 @@ function BettingSimulator() {
     totalPayouts = 0;
     gameHistory = [];
     matchPicks = {};
+    balanceHistory = [{ bet: 0, balance: 1000 }];
+    
     updateUI();
     document.getElementById('receipt-bankroll').textContent = `$${balance.toFixed(2)}`;
     document.getElementById('receipt-user-profit').textContent = "$0.00";
@@ -815,12 +829,15 @@ function BettingSimulator() {
     realityCheck.style.display = "none";
     mathBox.classList.add('hidden');
     selectedMatchId = null;
+    
+    chartContainer.style.display = "none";
+    chartTitle.style.display = "none";
+    
     renderMatches();
   });
 
   renderMatches();
   updateUI();
-  
   return container;
 }
 ```
