@@ -538,7 +538,7 @@ function BettingSimulator() {
     { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: -150, oddsB: +130, chanceA: 0.58 },
     { id: 2, sport: "NFL", teamA: "Chiefs", teamB: "Raiders", oddsA: -300, oddsB: +240, chanceA: 0.75 },
     { id: 3, sport: "MLB", teamA: "Yankees", teamB: "Red Sox", oddsA: -135, oddsB: +115, chanceA: 0.55 },
-    { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Chandler", oddsA: +150, oddsB: -175, chanceA: 0.38 },
+    { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Nurmagomedov", oddsA: +150, oddsB: -175, chanceA: 0.38 },
     { id: 5, sport: "SOCCER", teamA: "Man City", teamB: "Luton", oddsA: -900, oddsB: +650, chanceA: 0.85 },
     { id: 6, sport: "BOXING", teamA: "Mike Tyson", teamB: "Jake Paul", oddsA: -225, oddsB: +175, chanceA: 0.65 }
   ];
