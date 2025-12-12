@@ -1,6 +1,9 @@
 @import url("observablehq:default.css");
 @import url("observablehq:theme-near-midnight.css");
 
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
 :root {
     --primary: #171716;   
     --secondary: #334155; 
@@ -8,7 +11,11 @@
     --green: #10b981;
     --red: #ef4444;
     --text: #f8fafc;
+    --text2: #64748b;
+    --text3: #94a3b8;
+    --text-shaded: #ccc;
     --bg-dark: #171716;
+    --bg-white: #e5e7eb;
     --caption: #AEAEAE;   
 }
 
@@ -54,6 +61,9 @@ section {
     margin-bottom: 4rem;
 }
 
+/* =========================================
+   2. TITLE & SECTIONS
+   ========================================= */
 #title {
     display: flex;
     flex-direction: column;
@@ -75,12 +85,10 @@ section {
     font-style: italic;
 }
 
+/* Margins for main sections */
 #history, #trend, #platforms, #regulations, #results, #simulator {
     margin-left: 6rem;
     margin-right: 6rem;
-    /* for smaller screens*/
-    /* margin-left: 1rem;
-    margin-right: 1rem; */
 }
 
 #history-text {
@@ -90,299 +98,543 @@ section {
     align-items: center;
 }
 
-/* HISTORY SECTION */
-/* https://www.w3schools.com/howto/howto_css_timeline.asp */
-/* The actual timeline (the vertical ruler) */
+/* =========================================
+   3. HISTORY TIMELINE
+   ========================================= */
 #history .timeline {
-  position: relative;
-  max-width: 100%;
-  margin: 0 auto;
-  color: var(--primary);
-  margin-bottom: 6rem;
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto 6rem auto;
+    color: var(--primary);
 }
 
-/* The actual timeline (the vertical ruler) */
+/* Vertical Ruler */
 #history .timeline::after {
-  content: '';
-  position: absolute;
-  width: 0.375rem;
-  background-color: white;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  margin-left: -0.1875rem;
+    content: '';
+    position: absolute;
+    width: 0.375rem;
+    background-color: var(--bg-white);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -0.1875rem;
 }
 
-/* Container around content */
+/* Content Container */
 #history .timeline-container {
-  padding: 0.625rem 2.5rem;
-  position: relative;
-  background-color: white;
-  width: 50%;
-  margin: 0;
+    padding: 0.625rem 2.5rem;
+    position: relative;
+    background-color: var(--bg-white);
+    width: 50%;
+    margin: 0;
 }
 
-/* The circles on the timeline */
+/* Circles */
 #history .timeline-container::after {
-  content: '';
-  position: absolute;
-  width: 1.56rem;
-  height: 1.56rem;
-  right: -0.75px;
-  background-color: white;
-  border: 0.25rem solid #FF9F55;
-  border-radius: 50%;
-  top: 0.93rem;
-  right: 0;
-  transform: translateX(50%);
-  z-index: 1;
+    content: '';
+    position: absolute;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    background-color: var(--bg-white);
+    border: 0.25rem solid #FF9F55;
+    border-radius: 50%;
+    top: 0.9375rem;
+    right: -0.8125rem; /* Adjust centering */
+    z-index: 1;
 }
 
-/* Place the container to the left */
-#history .left {
-  left: 0;
-}
+/* Positioning */
+#history .left { left: 0; }
+#history .right { left: 50%; }
 
-/* Place the container to the right */
-#history .right {
-  left: 50%;
-}
-
-/* Add arrows to the left container (pointing right) */
+/* Arrows (Left Container) */
 #history .left::before {
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 1.375rem;
-  width: 0;
-  z-index: 1;
-  right: 1.875rem;
-  border: medium solid white;
-  border-width: 0.625rem 0 0.625rem 0.625rem;
-  border-color: transparent transparent transparent white;
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 1.375rem;
+    width: 0;
+    z-index: 1;
+    right: 1.875rem;
+    border: medium solid var(--bg-white);
+    border-width: 0.625rem 0 0.625rem 0.625rem;
+    border-color: transparent transparent transparent white;
 }
 
-/* Add arrows to the right container (pointing left) */
+/* Arrows (Right Container) */
 #history .right::before {
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 1.375rem;
-  width: 0;
-  z-index: 1;
-  left: 1.875rem;
-  border: medium solid white;
-  border-width: 0.625rem 0.625rem 0.625rem 0;
-  border-color: transparent white transparent transparent;
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 1.375rem;
+    width: 0;
+    z-index: 1;
+    left: 1.875rem;
+    border: medium solid var(--bg-white);
+    border-width: 0.625rem 0.625rem 0.625rem 0;
+    border-color: transparent var(--bg-white) transparent transparent;
 }
 
-/* Fix the circle for containers on the right side */
+/* Fix Circle for Right Side */
 #history .right::after {
-  right: auto;
-  left: 0;
-  transform: translateX(-50%);
+    left: -0.8125rem; /* Adjust centering */
+    right: auto;
 }
 
+/* =========================================
+   4. SIMULATOR: LAYOUT & CONTAINERS
+   ========================================= */
+.sim-container {
+    color: var(--bg-white);
+    width: 100%;
+    max-width: 75rem;
+    margin: 0 auto;
+}
 
+/* Headers */
+.sim-header-section { 
+    margin-bottom: 1.5rem;
+}
+.sim-title { 
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+.sim-subtitle { 
+    color: var(--text3);
+    font-size: 1.5rem;
+}
 
-/* SIMULATOR */
-/* Dashboard */
-.dashboard {
-    background: var(--primary);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+.sim-results-title {
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+/* Dashboard Box */
+.sim-dashboard {
+    background: var(--bg-dark);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
     border: 1px solid var(--secondary);
+    box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1.5rem;
 }
 
-.money-display {
+.sim-dashboard-label { 
+    color: var(--text3);
+    font-size: 0.9rem;
+}
+.sim-dashboard-label-right {
+    color: var(--text3);
+    font-size: 0.9rem;
+    text-align: right;
+}
+.suggestion-box {
+    background: #e0f2fe;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    color: #0369a1;
+    font-size: 0.9rem;
+}
+.money-display { 
     font-size: 1.8rem;
     font-weight: 700;
-    color: white;
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    color: var(--text);
+    text-shadow: 0 0 0.625rem rgba(59, 130, 246, 0.3);
 }
-
-.net-profit {
+.sim-profit-val { 
     font-size: 1.1rem;
     font-weight: 600;
+    text-align: right;
 }
 
-/* Controls */
-.controls {
+/* Controls Box */
+.sim-controls {
     background: var(--secondary);
-    padding: 15px 20px;
-    border-radius: 10px;
-    border-left: 5px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    border-left: 0.3125rem solid var(--accent);
+    margin-bottom: 1.5rem;
 }
 
-.custom-input {
-    background: var(--primary);
-    border: 1px solid #475569;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    width: 120px;
+.sim-flex-row {
+    display: flex;
+    gap: 1rem;
+    font-size: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+    width: 100%;
 }
 
-/* Match Cards */
-#matches-grid-container {
+.wager-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.sim-wager-label { 
+    color: var(--text);
+    font-weight: bold;
+    margin-right: 0.625rem;
+}
+.sim-helper-text { 
+    color: var(--text3);
+    font-size: 0.85rem;
+}
+
+/* =========================================
+   5. SIMULATOR: MATCH GRID & CARDS
+   ========================================= */
+.sim-grid {
     display: grid;
-    gap: 20px;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(21.875rem, 1fr));
 }
 
 .match-card {
     background: var(--primary);
-    border: 1px solid var(--secondary);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
     border: 2px solid var(--secondary);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.match-card:hover {
+    transform: translateY(-0.1875rem);
+    box-shadow: 0 0.625rem 1.25rem -0.3125rem rgba(0, 0, 0, 0.4);
+    border-color: var(--accent);
 }
 
 .match-card.selected {
     border-color: var(--accent);
-    background-color: #1f1f1f;
+    background-color: var(--bg-dark);
     transform: scale(1.02);
-}
-
-.match-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
-    border-color: var(--accent);
+    display: flex;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .sport-tag {
     font-size: 0.75rem;
     text-transform: uppercase;
     background: var(--secondary);
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: #94a3b8;
-    margin-bottom: 8px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--text3);
     display: inline-block;
-    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.0625rem;
 }
 
-.teams {
+.teams { 
     font-weight: 600;
     font-size: 1.1rem;
-    color: white;
+    color: var(--text);
 }
 
-/* Buttons */
+/* =========================================
+   6. SIMULATOR: INTERACTIVE ELEMENTS
+   ========================================= */
+/* Bet Buttons */
 .bet-buttons {
     display: flex;
-    gap: 10px;
+    gap: 0.625rem;
+    margin-top: 0.9375rem; 
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .bet-btn {
+    flex: 1;
     background: transparent;
     border: 2px solid var(--secondary);
     color: #cbd5e1;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 0.625rem;
+    border-radius: 0.5rem;
     cursor: pointer;
-    transition: all 0.2s;
-    min-width: 90px;
     text-align: center;
+    transition: all 0.2s;
+    min-width: 5.625rem;
 }
 
-.bet-btn:hover {
+.bet-btn:hover:not(:disabled) {
     background: var(--accent);
     border-color: var(--accent);
-    color: white;
+    color: var(--text);
 }
 
-.odds-val {
+.bet-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #444;
+}
+
+.odds-val { 
     display: block;
     font-weight: bold;
     font-size: 1.2em;
     color: var(--accent);
 }
-
-.bet-btn:hover .odds-val {
-    color: white;
+.bet-btn:hover .odds-val { 
+    color: var(--text);
 }
 
-.match-card .bet-buttons {
-    display: none;
-    margin-top: 15px;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.match-card.selected .bet-buttons {
-    display: flex;
-}
-
-.potential-payout {
-    font-size: 0.75rem;
-    color: var(--green);
-    display: block;
-    margin-top: 4px;
-    font-weight: bold;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* History Log */
-.history-log {
+/* Inputs */
+.custom-input {
     background: var(--primary);
-    padding: 20px;
-    border-radius: 12px;
-    max-height: 250px;
-    overflow-y: auto;
     border: 1px solid var(--secondary);
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    width: 6.25rem;
 }
 
-.log-entry {
-    border-bottom: 1px solid var(--secondary);
-    padding: 10px 0;
+.btn-reset {
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 0.3125rem 0.625rem;
+    border-radius: 0.3125rem;
+    cursor: pointer;
+}
+
+.btn-reset:hover { 
+    background: var(--red);
+    color: var(--text);
+}
+
+/* =========================================
+   7. SIMULATOR: INFO BOXES
+   ========================================= */
+/* Math Box */
+.math-box {
+    background-color: var(--bg-white);
+    color: var(--primary);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: 'Roboto Mono', monospace;
+    border-left: 0.3125rem solid var(--accent);
+    margin-top: 1rem;
+}
+.math-box.hidden { display: none; }
+
+.sim-math-header {
+    margin: 0 0 0.625rem 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+}
+
+.sim-formula-text { 
+    margin: 0 0 1rem 0;
+    font-size: 1.35rem;
+    color: var(--primary);
+}
+.wager-formula {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.sim-math-footer { 
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    color: #666;
+}
+
+.math-result-row {
+    background: #d1d5db;
+    padding: 0.625rem 0.625rem;
+    border-radius: 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 700;
     display: flex;
     justify-content: space-between;
 }
 
-/* Reality Check Warning */
-.reality-check {
-    background: #451a03;
-    border-left: 4px solid #f59e0b;
-    padding: 15px;
-    color: #fef3c7;
-    border-radius: 6px;
+/* Reality Check */
+.sim-reality-box {
     display: none;
+    background: #451a03;
+    border-left: 0.25rem solid #f59e0b;
+    padding: 0.9375rem;
+    color: #fef3c7;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
 }
 
-@container (min-width: 560px) {
-  .grid-cols-2-3 {
-    grid-template-columns: 1fr 1fr;
-  }
-  .grid-cols-2-3 .grid-colspan-2 {
-    grid-column: span 2;
-  }
+/* =========================================
+   8. SIMULATOR: LOGS & RECEIPTS
+   ========================================= */
+.sim-row-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: stretch; /* Match heights */
 }
 
-@container (min-width: 840px) {
+.sim-col {
+    flex: 1;
+    min-width: 18.75rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container Style for Logs & Receipts */
+.history-log, .receipt-container {
+    height: 18.75rem;
+    max-height: 31.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+    background: var(--bg-white);
+    color: var(--secondary);
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--secondary);
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Headers */
+.sim-log-header, .receipt-header {
+    flex-shrink: 0;
+    margin-top: 0;
+    color: var(--secondary) !important;
+    font-weight: bold !important;
+}
+
+.sim-log-header {
+    border-bottom: 1px solid var(--text-shaded);
+    padding-bottom: 0.625rem;
+}
+
+.receipt-header {
+    text-align: center;
+    border-bottom: 2px dashed #9ca3af;
+    padding-bottom: 0.9375rem;
+    margin-bottom: 0.9375rem;
+    font-weight: bold;
+}
+
+/* Scrolling Lists */
+#history-list, .sim-scroll-list {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 0.625rem; /* Space for scrollbar */
+    margin-bottom: 1rem;
+}
+
+.sim-placeholder {
+    text-align: center;
+    color: var(--text2);
+    font-size: 0.85rem;
+    padding-top: 1rem;
+}
+
+/* Rows & Text */
+.log-entry {
+    border-bottom: 1px solid var(--text-shaded);
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.sim-receipt-row { 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3125rem;
+}
+
+.sim-bankroll-val {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.sim-receipt-footer-row { 
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.3125rem;
+}
+
+.receipt-divider { 
+    border-top: 2px dashed #9ca3af;
+    margin: 0.9375rem 0;
+}
+.sim-text-secondary { 
+    color: var(--text2);
+}
+.text-win { 
+    color: var(--green);
+    font-weight: bold;
+}
+.text-loss { 
+    color: var(--red);
+    font-weight: bold;
+}
+
+/* =========================================
+   9. CUSTOM SCROLLBARS
+   ========================================= */
+/* Firefox */
+#history-list, .sim-scroll-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary) var(--bg-white);
+}
+
+/* WebKit (Chrome/Safari) */
+#history-list::-webkit-scrollbar, .sim-scroll-list::-webkit-scrollbar {
+    width: 0.75rem;
+}
+
+#history-list::-webkit-scrollbar-track, .sim-scroll-list::-webkit-scrollbar-track {
+    background: var(--bg-white);
+    border-radius: 0.625rem;
+}
+
+#history-list::-webkit-scrollbar-thumb, .sim-scroll-list::-webkit-scrollbar-thumb {
+    background-color: var(--bg-white);
+    border-radius: 0.625rem;
+    border: 0.1875rem solid var(--bg-white);
+}
+
+#history-list::-webkit-scrollbar-thumb:hover, .sim-scroll-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bg-white);
+}
+
+/* =========================================
+   10. MEDIA QUERIES & UTILITIES
+   ========================================= */
+.bulletpoint-list li::marker { color: var(--green); font-weight: bold; }
+.bulletpoint-list.negative li::marker { color: var(--red); }
+
+@container (min-width: 35rem) { /* 560px */
+  .grid-cols-2-3 { grid-template-columns: 1fr 1fr; }
+  .grid-cols-2-3 .grid-colspan-2 { grid-column: span 2; }
+}
+
+@container (min-width: 52.5rem) { /* 840px */
   .grid-cols-2-3 {
     grid-template-columns: 1fr 2fr;
     grid-auto-flow: column;
   }
 }
 
-.bulletpoint-list li::marker {
-    color: var(--green);
-    font-weight: bold;
-}
-
-/* For the negative list (concerns) */
-.bulletpoint-list.negative li::marker {
-    color: var(--red);
+/* =========================================
+   11. ANIMATIONS
+   ========================================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-0.3125rem); }
+    to { opacity: 1; transform: translateY(0); }
 }

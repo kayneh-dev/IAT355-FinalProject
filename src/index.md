@@ -194,37 +194,6 @@ function searchTrend(data, {width}){
     <p>Lastly, the smallest cut went to the operator's tax obligations to cities, counties, horse racing purses, and other community investments.</p>
 </section>
 
-<section id="simulator">
-    <div class="mb-4 text-center text-md-start">
-        <h2 class="fw-bold text-white">Sports Betting Simulator</h2>
-        <p class="text-secondary">Experience the volatility of sports betting. <em>(Educational Demo Only)</em></p>
-    </div>
-    <div class="dashboard mb-4">
-        <div>
-            <div class="dashboard-label">Bankroll</div>
-            <div class="money-display" id="balance-display">$1000.00</div>
-        </div>
-        <div class="text-md-end mt-3 mt-md-0">
-            <div class="dashboard-label">Net Profit/Loss</div>
-            <div class="net-profit" id="profit-display">$0.00</div>
-        </div>
-    </div>
-    <div class="controls mb-4">
-        <div class="row align-items-center g-3">
-            <div class="col-auto">
-                <label for="wager-amount" class="text-white fw-bold">Wager Amount ($):</label>
-            </div>
-            <div class="col-auto">
-                <input type="number" id="wager-amount" class="custom-input" value="50" min="10" max="1000">
-            </div>
-            <div class="col-auto">
-                <span class="small text-secondary">*Click a match button below to bet</span>
-            </div>
-        </div>
-    </div>
-    <div id="matches-grid-container"></div>
-</section>
-
 
 ```js
 const revenueDataset = await FileAttachment("./csv_Files/state_revenue7.csv").csv();
@@ -453,15 +422,412 @@ function usaRevenue({width, height}) {
     </div>
 </section>
 
-<section id="results">
-    <h1>Results</h1>
-    <div class="warning" label="Note" style="max-width: none;">
-        <p>Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the probability of the player losing money approaches 100%.</p>
-    </div>
-    <div class="history-log mt-4">
-        <h4 class="h5 text-white mb-3">Betting History</h4>
-        <div id="history-list"></div>
-    </div>
-</section>
 
-<script type="module" src="./js/sportsBettingSimulator.js"></script>
+```js
+function BettingSimulator() {
+  const container = document.createElement("div");
+  container.className = "sim-container";
+
+  container.innerHTML = `
+    <div class="sim-header-section">
+        <h2></h2>
+        <p class="sim-subtitle">Experience the volatility of sports betting. (Educational Demo Only)</p>
+    </div>
+
+    <div class="sim-dashboard">
+        <div>
+            <div class="sim-dashboard-label">Bankroll</div>
+            <div class="money-display" id="balance-display">$1000.00</div>
+        </div>
+        <div>
+            <div class="sim-dashboard-label-right">Net Profit/Loss</div>
+            <div id="profit-display" class="sim-profit-val">$0.00</div>
+        </div>
+    </div>
+
+    <div class="sim-controls">
+        <div class="sim-flex-row">
+            <div>
+                <label for="wager-amount" class="sim-wager-label">Wager ($):</label>
+                <input type="number" id="wager-amount" class="custom-input" value="100" min="10" max="1000">
+            </div>
+            <div class="wager-container">
+                <span id="selected-match-label" class="sim-helper-text">*Select a match to see calculation</span>
+            </div>
+            <button id="reset-btn" class="btn-reset">Restart Simulator</button>
+        </div>
+
+        <div id="math-breakdown" class="math-box hidden">
+            <h5 class="sim-math-header">How American Odds Work:</h5>
+            
+            <div class="suggestion-box">
+                <span id="american-concept"></span>
+            </div>
+
+            <p class="sim-formula-text" id="formula-text">
+                </p>
+
+            <div class="wager-formula" id="math-step-1"></div>
+            
+            <div class="math-result-row">
+                <span>To Return:</span>
+                <span id="math-total-return"><strong>$0.00</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="matches-grid-container" class="sim-grid"></div>
+
+    <h2 class="sim-results-title">Results & Economics</h2>
+    
+    <div id="reality-check" class="sim-reality-box">
+        <strong>Note:</strong> Notice how quickly the balance fluctuates? In professional sports betting, the "House Edge" ensures that over a long enough timeline, the player probability of losing money approaches 100%.
+    </div>
+
+    <div class="sim-row-layout">
+        <div class="sim-col">
+            <div class="history-log">
+                <h3 class="sim-log-header">Betting Log</h3>
+                <div id="history-list">
+                    <div id="log-placeholder" class="sim-placeholder">No bets placed yet.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sim-col">
+            <div class="receipt-container">
+                <h3 class="receipt-header">Bet Slip Receipt</h3>
+                
+                <div class="sim-receipt-row">
+                    <span>Current Bankroll</span>
+                    <strong id="receipt-bankroll" class="sim-bankroll-val">$1000.00</strong>
+                </div>
+                
+                <div id="receipt-games-list" class="sim-scroll-list">
+                    <div class="sim-placeholder">No bets placed yet.</div>
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <div>
+                    <div class="sim-receipt-row">
+                        <span>User Net Profit:</span>
+                        <span id="receipt-user-profit">$0.00</span>
+                    </div>
+                    <div class="sim-receipt-footer-row sim-text-secondary">
+                        <span>Service Revenue (Est.):</span>
+                        <span id="receipt-app-rev">$0.00</span>
+                    </div>
+                    <div class="sim-receipt-footer-row sim-text-secondary">
+                        <span>Gov. Tax (0.25%):</span>
+                        <span id="receipt-gov-tax">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  `;
+
+  // --- LOGIC ---
+  let balance = 1000.00;
+  const initialBalance = 1000.00;
+  let betCount = 0;
+  let lossStreak = 0;
+  let selectedMatchId = null;
+  let totalWagered = 0;
+  let totalPayouts = 0;
+  let gameHistory = [];
+  let matchPicks = {}; 
+
+  // --- UPDATED MATCH DATA TO AMERICAN ODDS ---
+  const matches = [
+    { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: -110, oddsB: -110, chanceA: 0.50 },
+    { id: 2, sport: "NFL", teamA: "Chiefs", teamB: "Raiders", oddsA: -300, oddsB: +240, chanceA: 0.75 },
+    { id: 3, sport: "MLB", teamA: "Yankees", teamB: "Red Sox", oddsA: -135, oddsB: +115, chanceA: 0.55 },
+    { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Chandler", oddsA: +150, oddsB: -175, chanceA: 0.38 },
+    { id: 5, sport: "SOCCER", teamA: "Man City", teamB: "Luton", oddsA: -900, oddsB: +650, chanceA: 0.85 },
+    { id: 6, sport: "BOXING", teamA: "Mike Tyson", teamB: "Jake Paul", oddsA: -225, oddsB: +175, chanceA: 0.65 }
+  ];
+
+  const matchesContainer = container.querySelector('#matches-grid-container');
+  const balanceDisplay = container.querySelector('#balance-display');
+  const historyList = container.querySelector('#history-list');
+  const realityCheck = container.querySelector('#reality-check');
+  const wagerInput = container.querySelector('#wager-amount');
+  const resetBtn = container.querySelector('#reset-btn');
+  const mathBox = container.querySelector('#math-breakdown');
+  const mathStep1 = container.querySelector('#math-step-1');
+  const mathTotalReturn = container.querySelector('#math-total-return');
+  const selectedMatchLabel = container.querySelector('#selected-match-label');
+  
+  const americanConcept = container.querySelector('#american-concept');
+  const formulaText = container.querySelector('#formula-text');
+
+  const receiptBankroll = container.querySelector('#receipt-bankroll');
+  const receiptGamesList = container.querySelector('#receipt-games-list');
+  const receiptUserProfit = container.querySelector('#receipt-user-profit');
+  const receiptAppRev = container.querySelector('#receipt-app-rev');
+  const receiptGovTax = container.querySelector('#receipt-gov-tax');
+
+  // --- HELPER: FORMAT AMERICAN ODDS STRING ---
+  function formatOdds(odds) {
+    return odds > 0 ? `+${odds}` : `${odds}`;
+  }
+
+  // --- HELPER: CALCULATE PAYOUT (AMERICAN LOGIC) ---
+  function calculatePayout(wager, odds) {
+    let profit = 0;
+    if (odds > 0) {
+        // Positive: (Wager * Odds) / 100
+        profit = wager * (odds / 100);
+    } else {
+        // Negative: (Wager * 100) / Positive Odds
+        profit = wager * (100 / Math.abs(odds));
+    }
+    return {
+        profit: profit,
+        total: profit + wager
+    };
+  }
+
+  function renderMatches() {
+    matchesContainer.innerHTML = '';
+    
+    matches.forEach(match => {
+        const card = document.createElement('div');
+        const isSelected = match.id === selectedMatchId ? 'selected' : '';
+        card.className = `match-card ${isSelected}`;
+        
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return; 
+            
+            selectedMatchId = (selectedMatchId === match.id) ? null : match.id;
+            
+            if(selectedMatchId) {
+                mathBox.classList.remove('hidden');
+            } else {
+                mathBox.classList.add('hidden');
+                selectedMatchLabel.textContent = "*Select a match to see calculation";
+            }
+            renderMatches();
+            updateMathBox();
+        });
+
+        const currentPick = matchPicks[match.id]; 
+        const disabledStyle = "opacity: 0.5; cursor: not-allowed; border-color: #444;";
+
+        card.innerHTML = `
+            <div>
+                <span class="sport-tag">${match.sport}</span>
+                <div style="font-weight:600; font-size:1.1rem; color:white;">${match.teamA} vs ${match.teamB}</div>
+            </div>
+        `;
+
+        if (selectedMatchId === match.id) {
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'bet-buttons';
+            
+            const btnA = document.createElement('button');
+            btnA.className = 'bet-btn';
+            if(currentPick === 'B') {
+                btnA.disabled = true;
+                btnA.style.cssText = disabledStyle;
+            }
+            btnA.innerHTML = `<span style="font-weight:600; color:white;">${match.teamA}</span><br><span class="odds-val">${formatOdds(match.oddsA)}</span>`;
+            btnA.addEventListener('click', (e) => { e.stopPropagation(); placeBet(match.id, 'A'); });
+            btnA.addEventListener('mouseenter', () => hoverBet(match.id, 'A'));
+            btnA.addEventListener('mouseleave', leaveBet);
+            
+            const btnB = document.createElement('button');
+            btnB.className = 'bet-btn';
+            if(currentPick === 'A') {
+                btnB.disabled = true;
+                btnB.style.cssText = disabledStyle;
+            }
+            btnB.innerHTML = `<span style="font-weight:600; color:white;">${match.teamB}</span><br><span class="odds-val">${formatOdds(match.oddsB)}</span>`;
+            btnB.addEventListener('click', (e) => { e.stopPropagation(); placeBet(match.id, 'B'); });
+            btnB.addEventListener('mouseenter', () => hoverBet(match.id, 'B'));
+            btnB.addEventListener('mouseleave', leaveBet);
+
+            btnContainer.appendChild(btnA);
+            btnContainer.appendChild(btnB);
+            card.appendChild(btnContainer);
+        }
+
+        matchesContainer.appendChild(card);
+    });
+  }
+
+  function hoverBet(matchId, pick) {
+    mathBox.classList.remove('hidden');
+    updateMathBox(matchId, pick);
+  }
+
+  function leaveBet() {
+    if (selectedMatchId) {
+        updateMathBox(selectedMatchId);
+    } else {
+        mathBox.classList.add('hidden');
+        selectedMatchLabel.textContent = "*Select a match to see calculation";
+    }
+  }
+
+  function updateMathBox(matchId = null, pick = null) {
+    const targetId = matchId || selectedMatchId;
+    if(!targetId) return; 
+
+    const match = matches.find(m => m.id === targetId);
+    const wager = parseFloat(wagerInput.value) || 0;
+    
+    const targetPick = pick || matchPicks[targetId] || 'A';
+    const isPickA = targetPick === 'A';
+    const teamName = isPickA ? match.teamA : match.teamB;
+    const odds = isPickA ? match.oddsA : match.oddsB;
+    
+    // Calculate Payout using new Logic
+    const result = calculatePayout(wager, odds);
+    
+    selectedMatchLabel.textContent = `Viewing calculation for ${teamName}`;
+    mathTotalReturn.innerHTML = `<strong>$${result.total.toFixed(2)}</strong>`;
+
+    // Dynamic Math Breakdown based on + or -
+    if (odds > 0) {
+        // Positive Logic
+        americanConcept.innerHTML = `This team is an <strong>Underdog (${formatOdds(odds)})</strong>. A $100 bet wins you $${odds} profit.`;
+        formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; Odds / 100) + Wager`;
+        mathStep1.innerHTML = `($${wager} &times; ${odds} / 100) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
+    } else {
+        // Negative Logic
+        americanConcept.innerHTML = `This team is a <strong>Favorite (${odds})</strong>. You must bet $${Math.abs(odds)} just to win $100 profit.`;
+        formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; 100 / Odds) + Wager`;
+        mathStep1.innerHTML = `($${wager} &times; 100 / ${Math.abs(odds)}) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
+    }
+  }
+
+  function placeBet(matchId, pick) {
+    if (matchPicks[matchId] && matchPicks[matchId] !== pick) {
+        alert("You cannot bet on the opponent! You must stick to your side.");
+        return;
+    }
+    const wager = parseFloat(wagerInput.value);
+
+    if (isNaN(wager) || wager <= 0) { alert("Please enter a valid wager amount."); return; }
+    if (wager > balance) { alert("Insufficient funds!"); return; }
+
+    matchPicks[matchId] = pick;
+    const match = matches.find(m => m.id === matchId);
+    const isPickA = pick === 'A';
+    const teamName = isPickA ? match.teamA : match.teamB;
+    const odds = isPickA ? match.oddsA : match.oddsB;
+    const winChance = match.chanceA; 
+
+    const randomOutcome = Math.random();
+    let won = false;
+    if (isPickA && randomOutcome < winChance) won = true;
+    else if (!isPickA && randomOutcome >= winChance) won = true;
+
+    balance -= wager;
+    totalWagered += wager; 
+    let profitAmt = -wager; 
+
+    // New Payout Logic
+    const result = calculatePayout(wager, odds);
+
+    if (won) {
+        balance += result.total;
+        totalPayouts += result.total;
+        profitAmt = result.profit;
+        lossStreak = 0;
+        logResult(teamName, wager, profitAmt, true);
+        gameHistory.push({ name: `Game ${betCount + 1}`, result: 'Win', val: profitAmt });
+    } else {
+        lossStreak++;
+        logResult(teamName, wager, -wager, false);
+        gameHistory.push({ name: `Game ${betCount + 1}`, result: 'Loss', val: -wager });
+    }
+    
+    betCount++;
+    updateUI();
+    updateReceipt();
+    renderMatches();
+    
+    if (betCount === 5 || lossStreak >= 3) {
+        realityCheck.style.display = "block";
+    }
+  }
+
+  function updateUI() {
+    balanceDisplay.textContent = `$${balance.toFixed(2)}`;
+    const profit = balance - initialBalance;
+    const profitDisplay = container.querySelector('#profit-display');
+    profitDisplay.textContent = `${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}`;
+    profitDisplay.style.color = profit >= 0 ? '#10b981' : '#ef4444'; 
+  }
+
+  function updateReceipt() {
+    receiptBankroll.textContent = `$${balance.toFixed(2)}`;
+    receiptGamesList.innerHTML = '';
+    
+    gameHistory.forEach(game => {
+        const row = document.createElement('div');
+        row.className = 'sim-receipt-row'; 
+        
+        const resultClass = game.result === 'Win' ? 'text-win' : 'text-loss';
+        row.innerHTML = `<span>${game.name} (${game.result})</span><span class="${resultClass}">${game.val >= 0 ? '+' : ''}$${game.val.toFixed(0)}</span>`;
+        receiptGamesList.appendChild(row);
+    });
+
+    const userProfit = balance - initialBalance;
+    receiptUserProfit.textContent = `${userProfit >= 0 ? '+' : ''}$${userProfit.toFixed(2)}`;
+    receiptUserProfit.style.color = userProfit >= 0 ? '#10b981' : '#ef4444';
+
+    const appRevenue = totalWagered - totalPayouts;
+    receiptAppRev.textContent = `${appRevenue >= 0 ? '+' : ''}$${appRevenue.toFixed(2)}`;
+    const tax = totalWagered * 0.0025; 
+    receiptGovTax.textContent = `+$${tax.toFixed(2)}`;
+  }
+
+  function logResult(team, wager, profit, won) {
+    const placeholder = historyList.querySelector('#log-placeholder');
+    if (placeholder) placeholder.remove();
+
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `<span>Bet on <strong>${team}</strong> ($${wager})</span><span class="${won ? 'text-win' : 'text-loss'}">${won ? 'WIN' : 'LOSS'} (${profit >= 0 ? '+' : ''}${profit.toFixed(2)})</span>`;
+    historyList.prepend(entry);
+  }
+
+  wagerInput.addEventListener('input', () => { renderMatches(); updateMathBox(); });
+  
+  resetBtn.addEventListener('click', () => {
+    balance = initialBalance;
+    betCount = 0;
+    lossStreak = 0;
+    totalWagered = 0;
+    totalPayouts = 0;
+    gameHistory = [];
+    matchPicks = {};
+    updateUI();
+    document.getElementById('receipt-bankroll').textContent = `$${balance.toFixed(2)}`;
+    document.getElementById('receipt-user-profit').textContent = "$0.00";
+    document.getElementById('receipt-app-rev').textContent = "$0.00";
+    document.getElementById('receipt-gov-tax').textContent = "$0.00";
+    historyList.innerHTML = '<div id="log-placeholder" class="sim-placeholder">No bets placed yet.</div>';
+    receiptGamesList.innerHTML = '<div class="sim-placeholder">No bets placed yet.</div>';
+    realityCheck.style.display = "none";
+    mathBox.classList.add('hidden');
+    selectedMatchId = null;
+    renderMatches();
+  });
+
+  renderMatches();
+  updateUI();
+  
+  return container;
+}
+```
+
+<section id="simulator">
+    <h1 class="sim-title">Try Your Own Luck !</h1>
+    <div class="card">${BettingSimulator()}</div>
+</section>
