@@ -9,7 +9,7 @@ style: styleExtension.css
     <video src="./assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
         <div id="title-text">
             <h1 style="font-size: 64px;">The Rise of <span>Sports Betting</span></h1>
-            <h2>Analyzing Gambling's Culture Shift</h2>
+            <h2>Analyzing a Culture Shift in Gambling</h2>
             <h2>IAT 355</h2>
         </div>
     </div>
@@ -54,7 +54,7 @@ let filteredData = stateFilter === "All"
 function mapPlot({width}) {
     return Plot.plot({
         projection: "albers-usa",
-        title: "Legality of Sports Betting Within U.S. States",
+        title: "Explore the Legality of Sports Betting across U.S. States",
         width,
         height: 600,
         color: {
@@ -80,7 +80,7 @@ function mapPlot({width}) {
 
 <section id="history">
     <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
-    <h1>How Sports Betting Became Legal in the United States</h1>
+    <h1>History of Sports Betting in the United States</h1>
     <!-- <h1>How Sports Betting Became Legal in the United States</h1>
     <div class="timeline">
         <div class="timeline-container left">
@@ -250,40 +250,105 @@ const top5States = Array.from(stateRevenueTotals.entries())
   .sort((a, b) => d3.descending(a[1], b[1]))
   .slice(0, 5);
 
-console.log(top5States);
+const highlightedStates = new Set(["New Jersey", "Nevada", "New York"]);
 ```
 
 ```js
 function revenuePlot({width}) {
     return Plot.plot({
-        title: "Sports Betting Revenue by State",
-        subtitle: "My Subtitle",
+        title: "Sports Betting Revenue by State (2018-2022)",
+        subtitle: "The sports betting ban was lifted in May 2018 by the U.S. Supreme Court, allowing each state to impose their own rules.",
         width,
-        height: 500,
         marginLeft: 80,
+        color: {legend: true},
         x: {grid: true, label: "Year"},
-        color: {legend: true, scheme: "RdYlBu"},
         marks: [
-            Plot.lineY(transformedRevenueData, 
+            Plot.lineY(transformedRevenueData.filter((d) => !highlightedStates.has(d.State)), 
+                {
+                    x: "Date",
+                    y: "Revenue",
+                    z: "State",
+                    stroke: "#7a7a7aff",
+                    opacity: 0.5,
+                    curve: "monotone-x",
+                    markerEnd: true
+                }
+            ),
+            Plot.lineY(transformedRevenueData.filter((d) => highlightedStates.has(d.State)), 
                 {
                     x: "Date",
                     y: "Revenue",
                     stroke: "State",
-                    opacity: 0.6,
                     tip: true,
                     curve: "monotone-x",
                     markerEnd: true
                 }
+            ),
+            Plot.tip(
+                [`Sports Betting is legalized in New Jersey. (June 2018)`],
+                {x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top"}
+            ),
+            Plot.tip(
+                [`The first online sports bet placed in New Jersey. (August 2018)`],
+                {x: new Date("2018-08-1"), y: 133, dy: -120, anchor: "bottom"}
+            ),
+            Plot.tip(
+                [`In-person sports betting is made legal in New York at specific casinos. (July 2019)`],
+                {x: new Date("2019-07-1"), y: 133, dy: 10, anchor: "top"}
+            ),
+            Plot.tip(
+                [`New York legalizes sports betting apps. (January 2022)`],
+                {x: new Date("2022-01-1"), y: 133, dy: -245, anchor: "bottom"}
+            ),
+            Plot.tip(
+                [`Nevada still requires in-person registration for mobile sports betting. (January 2022)`],
+                {x: new Date("2022-01-1"), y: 133, dy: 10, anchor: "top"}
             )
         ]
     });
 }
 ```
+
 ```js
 const defaultStartEnd = [transformedRevenueData.at(-53).Date, transformedRevenueData.at(-1).Date];
 const startEnd = Mutable(defaultStartEnd);
 const setStartEnd = (se) => startEnd.value = (se ?? defaultStartEnd);
 const getStartEnd = () => startEnd.value;
+
+const usa_revenue_data = await FileAttachment("./csv_Files/usa_revenue.csv").csv();
+const transformed_usa_revenue = usa_revenue_data.map(d => ({
+    Year: +d.Year,
+    Handle: +d.Handle / 1000000000,
+    GrossRevenue: +d.GrossRevenue,
+    HoldPercentage: +d.HoldPercentage,
+    Date: new Date(+d.Year, 0, 1)
+  }));
+
+function usaRevenue({width, height}) {
+    return Plot.plot({
+        title: "U.S. Sports Betting Market",
+        subtitle: "Handle is the total amount of money wagered to a company during a given period of time.",
+        width,
+        x: {grid: true, label: "Year", type: "band"},
+        y: {label: "Handle (Billion USD)"},
+        marks: [
+            Plot.barY(transformed_usa_revenue, {
+                x: "Date",
+                y: "Handle",
+                fill: "#405EC7",
+                tip: true,
+                insetLeft: 5,
+                insetRight: 5
+            }),
+            // Plot.ruleY([6.7, 9.9], {
+            //     stroke: "red",
+            //     strokeWidth: 2,
+            //     strokeDasharray: "4 4",
+            //     title: "Target Revenue"
+            // })
+        ]
+    });
+}
 ```
 
 <section id="regulations">
@@ -298,142 +363,79 @@ const getStartEnd = () => startEnd.value;
 </div>
 
 <div class="grid">
-    <div class="card">
-        <h2>Sports Betting Revenue by State (2018-2022)</h2>
-        <h3>Drag to zoom</h3><br>
-        ${resize((width) =>
-        Plot.plot({
-            width,
-            marginLeft: 80,
-            color: {legend: true, scheme: "RdYlBu",},
-            y: {grid: true, label: "Revenue (USD)"},
-            marks: [
-                Plot.ruleY([0]),
-                Plot.lineY(transformedRevenueData, {x: "Date", y: "Revenue", stroke: "State", tip: true, curve: "monotone-x", markerEnd: true}),
-                (index, scales, channels, dimensions, context) => {
-                    const x1 = dimensions.marginLeft;
-                    const y1 = 0;
-                    const x2 = dimensions.width - dimensions.marginRight;
-                    const y2 = dimensions.height;
-                    const brushed = (event) => {
-                    if (!event.sourceEvent) return;
-                    let {selection} = event;
-                    if (!selection) {
-                        const r = 10; // radius of point-based selection
-                        let [px] = d3.pointer(event, context.ownerSVGElement);
-                        px = Math.max(x1 + r, Math.min(x2 - r, px));
-                        selection = [px - r, px + r];
-                        g.call(brush.move, selection);
-                    }
-                    setStartEnd(selection.map(scales.x.invert));
-                    };
-                    const pointerdowned = (event) => {
-                    const pointerleave = new PointerEvent("pointerleave", {bubbles: true, pointerType: "mouse"});
-                    event.target.dispatchEvent(pointerleave);
-                    };
-                    const brush = d3.brushX().extent([[x1, y1], [x2, y2]]).on("brush end", brushed);
-                    const g = d3.create("svg:g").call(brush);
-                    g.call(brush.move, getStartEnd().map(scales.x));
-                    g.on("pointerdown", pointerdowned);
-                    return g.node();
-                },
-            ]
-            })
-            )}
-        </div>
-    </div>
-<div class="grid grid-cols-2-3" style="margin-top: 2rem;">
-  <div class="card">
-    <h2 style="margin-bottom: 1rem;">Highest Earning States <span class="muted">(Cumulative)</span></h2>
-    <table>
-        <tr>
-            <td>
-                <div>
-                    <h1>1. ${top5States[0][0]}</h1>
-                    <h1>$${top5States[0][1].toLocaleString("en-US")} <span class="muted">USD</span></h1>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div style="margin-top: 0.5rem;">
-                    <h2>2. ${top5States[1][0]}</h2>
-                    <h2>$${top5States[1][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div style="margin-top: 0.5rem;">
-                    <h2>3. ${top5States[2][0]}</h2>
-                    <h2>$${top5States[2][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="grid grid-cols-2" style="margin-top: 0.5rem;">
+    <div class="card">${
+        resize((width) => revenuePlot({width}))
+    }</div>
+</div>
+<div class="grid grid-cols-4">
+    <div class="grid grid-colspan-1">
+        <div class="card">
+            <h2>Highest Earning States <span class="muted">(Cumulative)</span></h2>
+        <table>
+            <tr>
+                <td>
                     <div>
-                        <h3>3. ${top5States[3][0]}</h3>
-                        <h3>$${top5States[3][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
+                        <h1>1. ${top5States[0][0]}</h1>
+                        <h1>$${top5States[0][1].toLocaleString("en-US")} <span class="muted">USD</span></h1>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="margin-top: 0.5rem;">
+                        <h2>2. ${top5States[1][0]}</h2>
+                        <h2>$${top5States[1][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="margin-top: 0.5rem;">
+                        <h2>3. ${top5States[2][0]}</h2>
+                        <h2>$${top5States[2][1].toLocaleString("en-US")} <span class="muted">USD</span></h2>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="grid grid-cols-2" style="margin-top: 0.5rem;">
+                        <div>
+                            <h3>3. ${top5States[3][0]}</h3>
+                            <h3>$${top5States[3][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
+                        </div>
                     <div>
-                        <h3>4. ${top5States[4][0]}</h3>
-                        <h3>$${top5States[4][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
+                    <h3>4. ${top5States[4][0]}</h3>
+                    <h3>$${top5States[4][1].toLocaleString("en-US")} <span class="muted">USD</span></h3>
                     </div>
                 </div>
-            </td>
-        </tr>
-    </table>
-  </div>
-  <div class="card">
-    <div>
-        <h2 style="margin-bottom: 1rem;">Notable Dates</h2>
-    </div>
-    <div class="grid grid-cols-2">
-        <div>
-            <h2>February/March</h2>
-            <ul>
-                <li><h2>Super Bowl <span class="muted">(NFL)</span></h2></li>
-                <li><h2>All-Star Weekend <span class="muted">(NBA)</span></h2></li>
-                <li><h2>March Madness <span class="muted">(College Basketball)</span></h2></li>
-                <li><h2>All-Star Weekend <span class="muted">(NBA)</span></h2></li>
-            </ul>
-        </div>
-        <div>
-            <h2>June/August</h2>
-            <ul>
-                <li><h2>NBA Finals <span class="muted">(NBA)</span></h2></li>
-                <li><h2>Stanley Cup Finals <span class="muted">(NHL)</span></h2></li>
-                <li><h2>US Open <span class="muted">(Tennis)</span></h2></li>
-            </ul>
-        </div>
-        <div>
-            <h2>September/October</h2>
-            <ul>
-            <li><h2>Start of NFL Season</h2></li>
-            <li><h2>Start of NBA Season</h2></li>
-            <li><h2>MLB Playoffs/World Series <span class="muted">(MLB)</span></h2></li>
-            </ul>
+                </td>
+            </tr>
+        </table>
+        <h2>Highest Tax Rate</h2>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <h1>51% <span class="muted">(New York)</span></h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <h2>Average Tax Rate</h2>
+                        <h1>19% </h1>
+                    </div>
+                </td>
+            </tr>
+        </table>
         </div>
     </div>
-  </div>
-  <div class="card grid-colspan-2 grid-rowspan-2" style="display: flex; flex-direction: column;">
-    <h2>Revenue ${startEnd === defaultStartEnd ? "over the past year" : startEnd.map((d) => d.toLocaleDateString("en-US")).join("–")}</h2><br>
-    <div style="flex-grow: 1;">${resize((width, height) =>
-      Plot.plot({
-        width,
-        height,
-        marginLeft: 80,
-        marginBottom: 80,
-        color: {legend: true, scheme: "RdYlBu",},
-        y: {grid: true, label: "Revenue (USD)"},
-        marks: [
-          Plot.lineY(transformedRevenueData.filter((d) => startEnd[0] <= d.Date && d.Date < startEnd[1]), {x: "Date", y: "Revenue", stroke: "State", tip: true, curve: "monotone-x",markerEnd: true})
-        ]
-      })
-    )}</div>
-  </div>
+    <div class="grid grid-colspan-3">
+        <div class="card">${
+            resize((width) => usaRevenue({width}))
+        }</div>
+    </div>
 </div>
     <p>
         However, sports betting has not yet gained the full support of the U.S. public. 
