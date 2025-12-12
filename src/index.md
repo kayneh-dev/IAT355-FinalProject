@@ -428,7 +428,8 @@ function BettingSimulator() {
 
   container.innerHTML = `
     <div class="sim-header-section">
-        <h2 class="sim-subtitle">Experience the volatility of sports betting. (Educational Demo Only)</h2>
+        <h2></h2>
+        <p class="sim-subtitle">Experience the volatility of sports betting. (Educational Demo Only)</p>
     </div>
 
     <div class="sim-dashboard">
@@ -445,8 +446,8 @@ function BettingSimulator() {
     <div class="sim-controls">
         <div class="sim-flex-row">
             <div>
-                <label for="wager-amount" class="sim-wager-label">Wager Amount ($):</label>
-                <input type="number" id="wager-amount" class="custom-input" value="50" min="10" max="1000">
+                <label for="wager-amount" class="sim-wager-label">Wager ($):</label>
+                <input type="number" id="wager-amount" class="custom-input" value="100" min="10" max="1000">
             </div>
             <div class="wager-container">
                 <span id="selected-match-label" class="sim-helper-text">*Select a match to see calculation</span>
@@ -455,10 +456,14 @@ function BettingSimulator() {
         </div>
 
         <div id="math-breakdown" class="math-box hidden">
-            <h5 class="sim-math-header">How the odds work:</h5>
-            <p class="sim-formula-text">
-                <strong>Formula:</strong> Potential Return = Wager &times; Decimal Odds
-            </p>
+            <h5 class="sim-math-header">How American Odds Work:</h5>
+            
+            <div class="suggestion-box">
+                <span id="american-concept"></span>
+            </div>
+
+            <p class="sim-formula-text" id="formula-text">
+                </p>
 
             <div class="wager-formula" id="math-step-1"></div>
             
@@ -466,7 +471,6 @@ function BettingSimulator() {
                 <span>To Return:</span>
                 <span id="math-total-return"><strong>$0.00</strong></span>
             </div>
-            <p class="sim-math-footer">*Decimal odds represent total payout (Stake + Profit).</p>
         </div>
     </div>
 
@@ -533,16 +537,18 @@ function BettingSimulator() {
   let gameHistory = [];
   let matchPicks = {}; 
 
+  // --- UPDATED MATCH DATA TO AMERICAN ODDS ---
   const matches = [
-    { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: 1.90, oddsB: 1.90, chanceA: 0.50 },
-    { id: 2, sport: "NFL", teamA: "Chiefs", teamB: "Raiders", oddsA: 1.30, oddsB: 3.80, chanceA: 0.75 },
-    { id: 3, sport: "MLB", teamA: "Yankees", teamB: "Red Sox", oddsA: 1.75, oddsB: 2.10, chanceA: 0.55 },
-    { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Chandler", oddsA: 2.50, oddsB: 1.55, chanceA: 0.38 }
+    { id: 1, sport: "NBA", teamA: "Lakers", teamB: "Warriors", oddsA: -110, oddsB: -110, chanceA: 0.50 },
+    { id: 2, sport: "NFL", teamA: "Chiefs", teamB: "Raiders", oddsA: -300, oddsB: +240, chanceA: 0.75 },
+    { id: 3, sport: "MLB", teamA: "Yankees", teamB: "Red Sox", oddsA: -135, oddsB: +115, chanceA: 0.55 },
+    { id: 4, sport: "UFC", teamA: "McGregor", teamB: "Chandler", oddsA: +150, oddsB: -175, chanceA: 0.38 },
+    { id: 5, sport: "SOCCER", teamA: "Man City", teamB: "Luton", oddsA: -900, oddsB: +650, chanceA: 0.85 },
+    { id: 6, sport: "BOXING", teamA: "Mike Tyson", teamB: "Jake Paul", oddsA: -225, oddsB: +175, chanceA: 0.65 }
   ];
 
   const matchesContainer = container.querySelector('#matches-grid-container');
   const balanceDisplay = container.querySelector('#balance-display');
-  const profitDisplay = container.querySelector('#profit-display');
   const historyList = container.querySelector('#history-list');
   const realityCheck = container.querySelector('#reality-check');
   const wagerInput = container.querySelector('#wager-amount');
@@ -552,11 +558,35 @@ function BettingSimulator() {
   const mathTotalReturn = container.querySelector('#math-total-return');
   const selectedMatchLabel = container.querySelector('#selected-match-label');
   
+  const americanConcept = container.querySelector('#american-concept');
+  const formulaText = container.querySelector('#formula-text');
+
   const receiptBankroll = container.querySelector('#receipt-bankroll');
   const receiptGamesList = container.querySelector('#receipt-games-list');
   const receiptUserProfit = container.querySelector('#receipt-user-profit');
   const receiptAppRev = container.querySelector('#receipt-app-rev');
   const receiptGovTax = container.querySelector('#receipt-gov-tax');
+
+  // --- HELPER: FORMAT AMERICAN ODDS STRING ---
+  function formatOdds(odds) {
+    return odds > 0 ? `+${odds}` : `${odds}`;
+  }
+
+  // --- HELPER: CALCULATE PAYOUT (AMERICAN LOGIC) ---
+  function calculatePayout(wager, odds) {
+    let profit = 0;
+    if (odds > 0) {
+        // Positive: (Wager * Odds) / 100
+        profit = wager * (odds / 100);
+    } else {
+        // Negative: (Wager * 100) / Positive Odds
+        profit = wager * (100 / Math.abs(odds));
+    }
+    return {
+        profit: profit,
+        total: profit + wager
+    };
+  }
 
   function renderMatches() {
     matchesContainer.innerHTML = '';
@@ -595,33 +625,30 @@ function BettingSimulator() {
             const btnContainer = document.createElement('div');
             btnContainer.className = 'bet-buttons';
             
-            // Button A
             const btnA = document.createElement('button');
             btnA.className = 'bet-btn';
             if(currentPick === 'B') {
                 btnA.disabled = true;
                 btnA.style.cssText = disabledStyle;
             }
-            btnA.innerHTML = `<span style="font-weight:600; color:white;">${match.teamA}</span><br><span class="odds-val">${match.oddsA.toFixed(2)}</span>`;
+            btnA.innerHTML = `<span style="font-weight:600; color:white;">${match.teamA}</span><br><span class="odds-val">${formatOdds(match.oddsA)}</span>`;
             btnA.addEventListener('click', (e) => { e.stopPropagation(); placeBet(match.id, 'A'); });
             btnA.addEventListener('mouseenter', () => hoverBet(match.id, 'A'));
             btnA.addEventListener('mouseleave', leaveBet);
             
-            // Button B
             const btnB = document.createElement('button');
             btnB.className = 'bet-btn';
             if(currentPick === 'A') {
                 btnB.disabled = true;
                 btnB.style.cssText = disabledStyle;
             }
-            btnB.innerHTML = `<span style="font-weight:600; color:white;">${match.teamB}</span><br><span class="odds-val">${match.oddsB.toFixed(2)}</span>`;
+            btnB.innerHTML = `<span style="font-weight:600; color:white;">${match.teamB}</span><br><span class="odds-val">${formatOdds(match.oddsB)}</span>`;
             btnB.addEventListener('click', (e) => { e.stopPropagation(); placeBet(match.id, 'B'); });
             btnB.addEventListener('mouseenter', () => hoverBet(match.id, 'B'));
             btnB.addEventListener('mouseleave', leaveBet);
 
             btnContainer.appendChild(btnA);
             btnContainer.appendChild(btnB);
-            
             card.appendChild(btnContainer);
         }
 
@@ -654,11 +681,25 @@ function BettingSimulator() {
     const isPickA = targetPick === 'A';
     const teamName = isPickA ? match.teamA : match.teamB;
     const odds = isPickA ? match.oddsA : match.oddsB;
-    const potentialReturn = (wager * odds).toFixed(2);
-
+    
+    // Calculate Payout using new Logic
+    const result = calculatePayout(wager, odds);
+    
     selectedMatchLabel.textContent = `Viewing calculation for ${teamName}`;
-    mathStep1.innerHTML = `$${wager} (Wager) &times; <span style="color:#3b82f6;">${odds.toFixed(2)}</span> (Odds) = <strong>$${potentialReturn}</strong>`;
-    mathTotalReturn.innerHTML = `<strong>$${potentialReturn}</strong>`;
+    mathTotalReturn.innerHTML = `<strong>$${result.total.toFixed(2)}</strong>`;
+
+    // Dynamic Math Breakdown based on + or -
+    if (odds > 0) {
+        // Positive Logic
+        americanConcept.innerHTML = `This team is an <strong>Underdog (${formatOdds(odds)})</strong>. A $100 bet wins you $${odds} profit.`;
+        formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; Odds / 100) + Wager`;
+        mathStep1.innerHTML = `($${wager} &times; ${odds} / 100) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
+    } else {
+        // Negative Logic
+        americanConcept.innerHTML = `This team is a <strong>Favorite (${odds})</strong>. You must bet $${Math.abs(odds)} just to win $100 profit.`;
+        formulaText.innerHTML = `<strong>Formula:</strong> (Wager &times; 100 / Odds) + Wager`;
+        mathStep1.innerHTML = `($${wager} &times; 100 / ${Math.abs(odds)}) + $${wager} = <strong>$${result.total.toFixed(2)}</strong>`;
+    }
   }
 
   function placeBet(matchId, pick) {
@@ -687,11 +728,13 @@ function BettingSimulator() {
     totalWagered += wager; 
     let profitAmt = -wager; 
 
+    // New Payout Logic
+    const result = calculatePayout(wager, odds);
+
     if (won) {
-        const payout = wager * odds;
-        balance += payout;
-        totalPayouts += payout;
-        profitAmt = payout - wager;
+        balance += result.total;
+        totalPayouts += result.total;
+        profitAmt = result.profit;
         lossStreak = 0;
         logResult(teamName, wager, profitAmt, true);
         gameHistory.push({ name: `Game ${betCount + 1}`, result: 'Win', val: profitAmt });
@@ -714,6 +757,7 @@ function BettingSimulator() {
   function updateUI() {
     balanceDisplay.textContent = `$${balance.toFixed(2)}`;
     const profit = balance - initialBalance;
+    const profitDisplay = container.querySelector('#profit-display');
     profitDisplay.textContent = `${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}`;
     profitDisplay.style.color = profit >= 0 ? '#10b981' : '#ef4444'; 
   }
