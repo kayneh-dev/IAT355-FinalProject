@@ -431,7 +431,7 @@ function BettingSimulator() {
   container.innerHTML = `
     <div class="sim-header-section">
         <h2></h2>
-        <p class="sim-subtitle">Experience the volatility of sports betting. <em>(Educational Demo Only)</em></p>
+        <p class="sim-subtitle">Experience the volatility of sports betting. (Educational Demo Only)</p>
     </div>
 
     <div class="sim-dashboard">
