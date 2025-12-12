@@ -296,7 +296,7 @@ const transformed_usa_revenue = usa_revenue_data.map(d => ({
 function usaRevenue({width, height}) {
     return Plot.plot({
         title: "U.S. Sports Betting Market",
-        subtitle: "Handle is the total amount of money wagered to a company during a given period of time.",
+        subtitle: "Handle is the total amount of money wagered by bettors to a company during a given period of time.",
         width,
         x: {grid: true, label: "Year", type: "band"},
         y: {label: "Handle (Billion USD)"},
