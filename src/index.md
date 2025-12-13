@@ -24,7 +24,8 @@ style: styleExtension.css
     const transformedData = legality.map(d => ({
         FIPS: +d.FIPS,
         States: d.States,
-        Legality: d.Legality
+        Legality: d.Legality,
+        LegalDate: d.LegalDate ? new Date(d.LegalDate) : null
     }));
 
     const lookup = new Map(transformedData.map(d => [d.FIPS, d]));
@@ -34,9 +35,12 @@ style: styleExtension.css
         return {
         ...f,
         States: row?.States ?? "Unknown",
-        Legality: row?.Legality ?? "Unknown"
+        Legality: row?.Legality ?? "Unknown",
+        LegalDate: row?.LegalDate ?? null
         };
     });
+
+    const formatYearMonth = d3.timeFormat("%Y-%m");
 ```
 
 ```js
@@ -54,7 +58,6 @@ let filteredData = stateFilter === "All"
 function mapPlot({width}) {
     return Plot.plot({
         projection: "albers-usa",
-        title: "Explore the Legality of Sports Betting across U.S. States",
         width,
         height: 600,
         color: {
@@ -69,10 +72,11 @@ function mapPlot({width}) {
                 fill: "Legality",
                 stroke: "white",
                 strokeWidth: 0.7,
-                title: d => `${d.States}: ${d.Legality}`,
-                opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25
+                title: d => `${d.States}: ${d.Legality}\nDate Legalized: ${d.LegalDate ? formatYearMonth(d.LegalDate) : "N/A"}`,
+                opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25,
+                tip: true 
             }),
-            Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
+            // Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
         ]
     });
 }
@@ -121,10 +125,14 @@ function mapPlot({width}) {
         </div>
     </div> -->
     <div class="card grid grid-cols-1 grid-rows-4">
-        <div class="grid-colspan-1 grid-rowspan-4">${
-            resize((width) => mapPlot({width}))
-        }</div>
-        <h3>${stateFilterInput}</h3>
+        <div>
+            <h2>Explore the Legality of Sports Betting across U.S. States</h2>
+            <h3>Hover to view more details</h3>
+            <h3 style="max-width: 320px; margin-top: 0.5rem;">${stateFilterInput}</h3>
+            <div class="grid-colspan-1 grid-rowspan-4">${
+                resize((width) => mapPlot({width}))
+            }</div>
+        </div>
     </div>
     <div class="history-text">
         <h2>Different states, different regulations</h2>
@@ -231,6 +239,7 @@ function revenuePlot({width}) {
         marginLeft: 80,
         color: {legend: true},
         x: {grid: true, label: "Year"},
+        y: {label: "Revenue (Million USD)"},
         marks: [
             Plot.lineY(transformedRevenueData.filter((d) => !highlightedStates.has(d.State)), 
                 {
@@ -248,30 +257,30 @@ function revenuePlot({width}) {
                     x: "Date",
                     y: "Revenue",
                     stroke: "State",
-                    tip: true,
                     curve: "monotone-x",
                     markerEnd: true
                 }
             ),
+            // tips are best shown at min width 1100
             Plot.tip(
                 [`Sports Betting is legalized in New Jersey. (June 2018)`],
-                {x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top", textOverflow: "clip"})
             ),
             Plot.tip(
                 [`The first online sports bet placed in New Jersey. (August 2018)`],
-                {x: new Date("2018-08-1"), y: 133, dy: -120, anchor: "bottom"}
+                Plot.pointerX({x: new Date("2018-08-1"), y: 133, dy: -120, anchor: "bottom"})
             ),
             Plot.tip(
                 [`In-person sports betting is made legal in New York at specific casinos. (July 2019)`],
-                {x: new Date("2019-07-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2019-07-1"), y: 133, dy: 10, anchor: "top"})
             ),
             Plot.tip(
                 [`New York legalizes sports betting apps. (January 2022)`],
-                {x: new Date("2022-01-1"), y: 133, dy: -245, anchor: "bottom"}
+                Plot.pointerX({x: new Date("2022-01-1"), y: 133, dy: -245, anchor: "bottom"})
             ),
             Plot.tip(
                 [`Nevada still requires in-person registration for mobile sports betting. (January 2022)`],
-                {x: new Date("2022-01-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2022-01-1"), y: 133, dy: 10, anchor: "top"})
             )
         ]
     });
@@ -309,12 +318,6 @@ function usaRevenue({width, height}) {
                 insetLeft: 5,
                 insetRight: 5
             }),
-            // Plot.ruleY([6.7, 9.9], {
-            //     stroke: "red",
-            //     strokeWidth: 2,
-            //     strokeDasharray: "4 4",
-            //     title: "Target Revenue"
-            // })
         ]
     });
 }
