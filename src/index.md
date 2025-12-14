@@ -192,9 +192,162 @@ function searchTrend(data, {width}){
     </div>
 </section>
 
+```js
+function generateValue(target, defaultValue) {
+  return Generators.observe((notify) => {
+    const changed = ({target}) => notify(target.value ?? defaultValue);
+    if (defaultValue !== undefined) notify(defaultValue);
+    target.addEventListener("input", changed);
+    return () => target.removeEventListener("input", changed);
+  });
+}
+
+function platformLineChart(data, {width, height = 94, x = "Year", y, percent} = {}) {
+  return Plot.plot({
+    width,
+    height,
+    axis: null,
+    margin: 0,
+    insetTop: 10,
+    insetLeft: -17,
+    insetRight: -17,
+    insetBottom: -17,
+    y: {zero: true, percent, domain: percent ? [0, 100] : undefined},
+    marks: [Plot.areaY(data, {x, y, fillOpacity: 0.2}), Plot.lineY(data, {x, y, tip: true})]
+  });
+}
+
+function trendNumber(data, {focus, value, ...options} = {}) {
+  const focusIndex = data.findIndex((d) => d === focus);
+  if (focusIndex <= 0) {
+    return formatTrend(0, options);
+  }
+  return formatTrend(focus[value] - data[focusIndex - 1]?.[value], options);
+}
+
+function formatTrend(
+  value,
+  {
+    locale,
+    format = {},
+    positive = "green",
+    negative = "red",
+    base = "muted",
+    positiveSuffix = "m ↗︎",
+    negativeSuffix = "m ↘︎",
+    baseSuffix = ""
+  } = {}
+) {
+  if (format.signDisplay === undefined) format = {...format, signDisplay: "always"};
+  return html`<span class="small ${value > 0 ? positive : value < 0 ? negative : base}">${value.toLocaleString(
+    locale,
+    format
+  )}${value > 0 ? positiveSuffix : value < 0 ? negativeSuffix : baseSuffix}`;
+}
+```
+
+```js
+const formatYear = d3.timeFormat("%Y");
+
+const fanduelUserData = await FileAttachment("./csv_Files/fanduel_users.csv").csv();
+const transformed_fanduelUserData = fanduelUserData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Users: +d.Users
+}));
+
+const fanduelDownloadsData = await FileAttachment("./csv_Files/fanduel_downloads.csv").csv();
+const transformed_fanduelDownloadsData = fanduelDownloadsData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Downloads: +d.Downloads
+}));
+
+const draftkingsUserData = await FileAttachment("./csv_files/draftkings_users.csv").csv();
+const transformed_draftkingsUserData = draftkingsUserData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Users: +d.Users
+}));
+
+const draftkingsDownloadsData = await FileAttachment("./csv_files/draftkings_downloads.csv").csv();
+const transformed_draftkingsDownloadsData = draftkingsDownloadsData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Downloads: +d.Downloads
+}));
+
+const fanduelUsersChart = resize((width) => platformLineChart(transformed_fanduelUserData, {width, y: "Users"}));
+const fanduelDownloadsChart = resize((width) => platformLineChart(transformed_fanduelDownloadsData, {width, y: "Downloads"}));
+const draftkingsUsersChart = resize((width) => platformLineChart(transformed_draftkingsUserData, {width, y: "Users"}));
+const draftkingsDownloadsChart = resize((width) => platformLineChart(transformed_draftkingsDownloadsData, {width, y: "Downloads"}));
+
+const fanduelUsers = generateValue(fanduelUsersChart, transformed_fanduelUserData[transformed_fanduelUserData.length - 1]);
+const fanduelDownloads = generateValue(fanduelDownloadsChart, transformed_fanduelDownloadsData[transformed_fanduelDownloadsData.length - 1]);
+const draftkingsUsers = generateValue(draftkingsUsersChart, transformed_draftkingsUserData[transformed_draftkingsUserData.length - 1]);
+const draftkingsDownloads = generateValue(draftkingsDownloadsChart, transformed_draftkingsDownloadsData[transformed_draftkingsDownloadsData.length - 1]);
+```
+
+```js
+const app_revenue_data = await FileAttachment("./csv_Files/app_revenue.csv").csv();
+const transformed_app_revenue = app_revenue_data.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Revenue: +d.Revenue,
+  }));
+
+function appRevenue({width, height}) {
+    return Plot.plot({
+        title: "Towards the Digital Era",
+        subtitle: "Revenue from leading online sports betting platforms FanDuel & DraftKings",
+        width,
+        x: {grid: true, label: "Year", type: "band"},
+        y: {label: "Revenue (Billion USD)"},
+        fx: {domain: ["FanDuel", "DraftKings"]},
+        marks: [
+            Plot.barY(transformed_app_revenue, {
+                x: "Year",
+                y: "Revenue",
+                fx: "Platform",
+                fill: d => d.Platform === "FanDuel" ? "#0078FF" : "#61B510",
+                tip: true,
+                insetLeft: 5,
+                insetRight: 5
+            }),
+        ]
+    });
+}
+```
+
 <section id="platforms">
     <h1>Comparing Platforms</h1>
-    <img src="./assets/Platform-Comparison.png" alt="">
+    <div class="grid grid-cols-4">
+        <div class="card crop">
+            <h2><span style="color: #0078FF;">FanDuel</span> Active Users <span class="muted">(2020 - 2024)</span></h2>
+            <div class="big">${fanduelUsers.Users.toLocaleString("en-US")}m ${trendNumber(transformed_fanduelUserData, {focus: fanduelUsers, value: "Users"})}</div>${
+                fanduelUsersChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #0078FF;">FanDuel</span> App Downloads <span class="muted">(2019 - 2024)</span></h2>
+            <div class="big">${fanduelDownloads.Downloads.toLocaleString("en-US")}m ${trendNumber(transformed_fanduelDownloadsData, {focus: fanduelDownloads, value: "Downloads"})}</div>${
+                fanduelDownloadsChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #61B510;">DraftKings</span> Active Users <span class="muted">(2020 - 2024)</span></h2>
+            <div class="big">${draftkingsUsers.Users.toLocaleString("en-US")}m ${trendNumber(transformed_draftkingsUserData, {focus: draftkingsUsers, value: "Users"})}</div>${
+                draftkingsUsersChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #61B510;">DraftKings</span> App Downloads <span class="muted">(2019 - 2024)</span></h2>
+            <div class="big">${draftkingsDownloads.Downloads.toLocaleString("en-US")}m ${trendNumber(transformed_draftkingsDownloadsData, {focus: draftkingsDownloads, value: "Downloads"})}</div>${
+                draftkingsDownloadsChart
+        }</div>
+    </div>
+    <div class="grid grid-cols-4">
+        <div class="card grid-colspan-4">${
+            resize((width) => appRevenue({width}))
+        }</div>
+    </div>
     <h3>Where does the revenue go?</h3>
     <p>In the first 13 months of legalization, the largest cut of revenue was, unsurprisingly, retained by the sports betting operators. However, a few other groups also gain from legalization.</p>
     <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. With the development of these statespecific regulations and policies, the first year's sum of almost 70 million U.S. dollars looks set to grow in the future.</p>
@@ -288,11 +441,6 @@ function revenuePlot({width}) {
 ```
 
 ```js
-const defaultStartEnd = [transformedRevenueData.at(-53).Date, transformedRevenueData.at(-1).Date];
-const startEnd = Mutable(defaultStartEnd);
-const setStartEnd = (se) => startEnd.value = (se ?? defaultStartEnd);
-const getStartEnd = () => startEnd.value;
-
 const usa_revenue_data = await FileAttachment("./csv_Files/usa_revenue.csv").csv();
 const transformed_usa_revenue = usa_revenue_data.map(d => ({
     Year: +d.Year,
