@@ -7,10 +7,9 @@ style: styleExtension.css
 <section>
     <div id="title">
     <video src="./assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
-        <div id="title-text">
-            <h1 style="font-size: 64px;">The Rise of <span>Sports Betting</span></h1>
-            <h2>Analyzing a Culture Shift in Gambling</h2>
-            <h2>IAT 355</h2>
+        <div id="title-text-container">
+            <h1 class="title-text">The Rise of <span>Sports Betting</span></h1>
+            <h2 class="subtitle-text">Analyzing a Culture Shift in Gambling</h2>
         </div>
     </div>
 </section>
@@ -63,7 +62,7 @@ function mapPlot({width}) {
         color: {
             type: "ordinal",
             domain: ["Illegal", "Retail only", "Online only", "Legal"],
-            range: ["#d73027", "#b7d9edff", "#6ba2c4ff", "#07588eff"],
+            range: ["#B3B3B3", "#b7d9edff", "#6ba2c4ff", "#07588eff"],
             legend: true,
             label: "Sports betting status (2025)",
         },
@@ -81,12 +80,12 @@ function mapPlot({width}) {
 }
 ```
 <section id="overview">
-    <h1>Overview</h1>
+    <h1 class="heading">Overview</h1>
     <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
 </section>
 
 <section id="history">
-    <h1>Brief History of Sports Betting in the United States</h1>
+    <h1 class="heading">Brief History of Sports Betting in the United States</h1>
     <div>
         <p>Sports betting in the United States traces its modern roots to Las Vegas, where Nevada’s decision to legalize gambling in 1931 made it the only place in the country where sports wagering could operate openly and legally. For decades, while most states prohibited betting, Las Vegas casinos became the center of the industry. Long before legalization spread across the country, Las Vegas shaped the culture, economics, and structure of American sports betting, earning its role as the birthplace of the modern industry.</p>
         <p>However in June 1991, sports betting was found to be a national problem. As sports betting grew more widespread, the federal government passed a series of laws to act around an industry that was spiraling into scandals and criminality.</p>
@@ -156,7 +155,7 @@ function searchTrend(data, {width}){
 ```
 
 <section id="trend">
-    <h1>Is It Really That Popular?</h1>
+    <h1 class="heading">Is It Really That Popular?</h1>
     <p> Sports betting has steadily grown in public interest over the past two decades, and this trend is clearly reflected in the Google search data visualized above. The blue line shows how often people searched for “sports betting” over time, while the red regression line highlights the long-term direction of this activity. Despite short-term spikes around major sporting events, the upward slope of the regression line suggests a gradual and consistent increase in interest. In other words, people are searching for sports betting more frequently now than in previous years, reflecting broader cultural acceptance, expanding legalization across states, and rising accessibility through online platforms. </p>
     <div class="grid grid-cols-1">
     <div class="card">${
@@ -293,7 +292,7 @@ function appRevenue({width, height}) {
 ```
 
 <section id="platforms">
-    <h1>Online Presence</h1>
+    <h1 class="heading">Online Presence</h1>
     <p>The emergence of gambling platforms like FanDuel and DraftKings marked a culture shift in U.S. sports betting by shifting activity from casino sportsbooks to digital, mobile-first platforms. Originally launched in the 2010s as daily fantasy sports companies, both companies were well positioned to pivot after the legalization of sports betting in 2018. FanDuel and DraftKings helped normalize betting as an always-available, online activity rather than a restricted experience limited to physical locations. With advertisements, sponsorships and partnerships from professional sport leagues like the NBA, NHL, NFL, MLB and UFC, these platforms have redefined how the population engages with sports betting.</p>
     <div class="grid grid-cols-4">
         <div class="card crop">
@@ -430,7 +429,7 @@ function usaRevenue({width, height}) {
             Plot.barY(transformed_usa_revenue, {
                 x: "Date",
                 y: "Handle",
-                fill: "#405EC7",
+                fill: "#0078FF",
                 tip: true,
                 insetLeft: 5,
                 insetRight: 5
@@ -440,7 +439,7 @@ function usaRevenue({width, height}) {
 }
 ```
 
-<section id="regulations">
+<section id="regulations" class="heading">
     <h1>Regulating the 'Sport'</h1>
     <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. Generally, the tax revenue from sports betting is designated for public projects and state funds, which go back to the community and to numerous responsible gambling initiatives.</p>
     <p>In New York, sports betting revenue is taxed at 51 percent, with all funds providing aid to public school education. Additionally, $5 million is used anually to fund sports programs for underserved youths, and $6 million is used anually to fund problem gambling education and treatment.</p>
@@ -943,6 +942,6 @@ function BettingSimulator() {
 ```
 
 <section id="simulator">
-    <h1 class="sim-title">Try Your Own Luck !</h1>
+    <h1 class="heading">Try Your Own Luck!</h1>
     <div class="card">${BettingSimulator()}</div>
 </section>
