@@ -174,6 +174,7 @@ section {
     border: 0.063rem solid var(--secondary);
     box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.3);
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
@@ -249,7 +250,7 @@ section {
 .sim-grid {
     display: grid;
     gap: 1.25rem;
-    grid-template-columns: repeat(auto-fit, minmax(21.875rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
 .match-card {
@@ -428,7 +429,7 @@ section {
 
 .bankroll-chart-box {
     display: none;
-    background: var(--bg-white);
+    background: var(--bg-dark);
     padding: 1.25rem;
     border-radius: 0.75rem;
     border: 0.063rem solid var(--secondary);
@@ -460,8 +461,8 @@ section {
     flex-direction: column;
     overflow: hidden;
     
-    background: var(--bg-white);
-    color: var(--secondary);
+    background: var(--bg-dark);
+    color: var(--text);
     padding: 1.25rem;
     margin-bottom: 0.5rem;
     border-radius: 0.75rem;
@@ -473,7 +474,7 @@ section {
 .sim-log-header, .receipt-header {
     flex-shrink: 0;
     margin-top: 0;
-    color: var(--secondary) !important;
+    color: var(--text) !important;
     font-weight: bold !important;
 }
 
@@ -536,7 +537,7 @@ section {
     margin: 0.9375rem 0;
 }
 .sim-text-secondary { 
-    color: var(--text2);
+    color: var(--text3);
 }
 .text-win { 
     color: var(--green);
@@ -553,7 +554,7 @@ section {
 /* Firefox */
 #history-list, .sim-scroll-list {
     scrollbar-width: thin;
-    scrollbar-color: var(--secondary) var(--bg-white);
+    scrollbar-color: var(--bg-white) var(--bg-dark);
 }
 
 /* WebKit (Chrome/Safari) */
@@ -562,14 +563,14 @@ section {
 }
 
 #history-list::-webkit-scrollbar-track, .sim-scroll-list::-webkit-scrollbar-track {
-    background: var(--bg-white);
+    background: var(--bg-dark);
     border-radius: 0.625rem;
 }
 
 #history-list::-webkit-scrollbar-thumb, .sim-scroll-list::-webkit-scrollbar-thumb {
-    background-color: var(--bg-white);
+    background-color: var(--bg-dark);
     border-radius: 0.625rem;
-    border: 0.1875rem solid var(--bg-white);
+    border: 0.1875rem solid var(--bg-dark);
 }
 
 #history-list::-webkit-scrollbar-thumb:hover, .sim-scroll-list::-webkit-scrollbar-thumb:hover {
@@ -579,12 +580,68 @@ section {
 /* =========================================
    10. MEDIA QUERIES & UTILITIES
    ========================================= */
-.bulletpoint-list li::marker { color: var(--green); font-weight: bold; }
-.bulletpoint-list.negative li::marker { color: var(--red); }
+.bulletpoint-list li::marker { 
+    color: var(--green);
+    font-weight: bold;
+}
+.bulletpoint-list.negative li::marker {
+    color: var(--red);
+}
+
+@media (max-width: 26rem) {
+    /* Reduce padding in the containers to gain width */
+    .history-log, .receipt-container {
+        padding: 0.75rem;
+    }
+
+    .sim-log-header, .receipt-header {
+        font-size: 0.85rem;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .log-entry, 
+    .sim-receipt-row, 
+    .sim-receipt-footer-row,
+    .sim-placeholder {
+        font-size: 0.75rem;
+    }
+
+    .sim-bankroll-val {
+        font-size: 1rem; 
+    }
+
+    /* Tighten the gap in the flex rows to prevent wrapping too early */
+    .sim-receipt-row, .sim-receipt-footer-row {
+        gap: 0.5rem;
+    }
+}
 
 @container (min-width: 35rem) { /* 560px */
   .grid-cols-2-3 { grid-template-columns: 1fr 1fr; }
   .grid-cols-2-3 .grid-colspan-2 { grid-column: span 2; }
+}
+
+@media (max-width: 48rem) {
+    /* Stack the log and receipt vertically on tablets/mobiles */
+    .sim-col {
+        min-width: 100%;
+    }
+    
+    /* Adjust controls layout for mobile */
+    .sim-controls .sim-flex-row {
+        gap: 0.5rem;
+    }
+    
+    .sim-controls .wager-container {
+        width: 100%;
+        order: 2;
+        margin-top: 0.5rem;
+    }
+    
+    .sim-controls .btn-reset {
+        margin-left: auto;
+    }
 }
 
 @container (min-width: 52.5rem) { /* 840px */

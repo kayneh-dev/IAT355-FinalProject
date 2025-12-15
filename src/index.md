@@ -707,7 +707,7 @@ function BettingSimulator() {
         grid: true,
         style: {
             backgroundColor: "transparent",
-            color: "#334155", 
+            color: "#94a3b8", 
             fontSize: "12px"
         },
         x: { label: "Bets Placed" },
