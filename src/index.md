@@ -451,7 +451,7 @@ function usaRevenue({width, height}) {
     }</div>
 </div>
 <div class="grid grid-cols-4">
-    <div class="grid grid-colspan-1">
+    <div class="grid state-stats">
         <div class="card">
             <h2>Highest Earning States <span class="muted">(Cumulative)</span></h2>
         <table>
