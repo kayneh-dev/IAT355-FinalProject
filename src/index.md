@@ -7,10 +7,9 @@ style: styleExtension.css
 <section>
     <div id="title">
     <video src="./assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
-        <div id="title-text">
-            <h1 style="font-size: 64px;">The Rise of <span>Sports Betting</span></h1>
-            <h2>Analyzing a Culture Shift in Gambling</h2>
-            <h2>IAT 355</h2>
+        <div id="title-text-container">
+            <h1 class="title-text">The Rise of <span>Sports Betting</span></h1>
+            <h2 class="subtitle-text">Analyzing a Culture Shift in Gambling</h2>
         </div>
     </div>
 </section>
@@ -24,7 +23,8 @@ style: styleExtension.css
     const transformedData = legality.map(d => ({
         FIPS: +d.FIPS,
         States: d.States,
-        Legality: d.Legality
+        Legality: d.Legality,
+        LegalDate: d.LegalDate ? new Date(d.LegalDate) : null
     }));
 
     const lookup = new Map(transformedData.map(d => [d.FIPS, d]));
@@ -34,9 +34,12 @@ style: styleExtension.css
         return {
         ...f,
         States: row?.States ?? "Unknown",
-        Legality: row?.Legality ?? "Unknown"
+        Legality: row?.Legality ?? "Unknown",
+        LegalDate: row?.LegalDate ?? null
         };
     });
+
+    const formatYearMonth = d3.timeFormat("%Y-%m");
 ```
 
 ```js
@@ -54,13 +57,12 @@ let filteredData = stateFilter === "All"
 function mapPlot({width}) {
     return Plot.plot({
         projection: "albers-usa",
-        title: "Explore the Legality of Sports Betting across U.S. States",
         width,
         height: 600,
         color: {
             type: "ordinal",
             domain: ["Illegal", "Retail only", "Online only", "Legal"],
-            range: ["#d73027", "#b7d9edff", "#6ba2c4ff", "#07588eff"],
+            range: ["#B3B3B3", "#b7d9edff", "#6ba2c4ff", "#07588eff"],
             legend: true,
             label: "Sports betting status (2025)",
         },
@@ -69,66 +71,44 @@ function mapPlot({width}) {
                 fill: "Legality",
                 stroke: "white",
                 strokeWidth: 0.7,
-                title: d => `${d.States}: ${d.Legality}`,
-                opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25
+                title: d => `${d.States}: ${d.Legality}\nDate Legalized: ${d.LegalDate ? formatYearMonth(d.LegalDate) : "N/A"}`,
+                opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25,
+                tip: true 
             }),
-            Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
         ]
     });
 }
 ```
+<section id="overview">
+    <h1 class="heading">Overview</h1>
+    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
+</section>
 
 <section id="history">
-    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
-    <h1>History of Sports Betting in the United States</h1>
-    <!-- <h1>How Sports Betting Became Legal in the United States</h1>
-    <div class="timeline">
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>January 1992</h3>
-            <p>The Professional and Amateur Sports Protection Act of 1992 (PASPA) signed into law; sports betting becomes illegal in the U.S.</p>
-            </div>
+    <h1 class="heading">Brief History of Sports Betting in the United States</h1>
+    <div>
+        <p>Sports betting in the United States traces its modern roots to Las Vegas, where Nevada’s decision to legalize gambling in 1931 made it the only place in the country where sports wagering could operate openly and legally. For decades, while most states prohibited betting, Las Vegas casinos became the center of the industry. Long before legalization spread across the country, Las Vegas shaped the culture, economics, and structure of American sports betting, earning its role as the birthplace of the modern industry.</p>
+        <p>However in June 1991, sports betting was found to be a national problem. As sports betting grew more widespread, the federal government passed a series of laws to act around an industry that was spiraling into scandals and criminality.</p>
+        <div class="caution" label="January 1992" style="max-width: none;">
+            <p>The Professional and Amateur Sports Protection Act of 1992 (PASPA) signed into law. Sports betting becomes illegal in the U.S. with Nevada, Oregon, Delaware and Montana being permitted to continue operations that were already in existence.</p>
         </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>November 2011</h3>
-            <p>The Sports Betting Amendment is approved in New Jersey. The measure amends the state constitution to allow the legislature to legalize betting on the results of professional, college, and amateur sporting events. Governor Christie signs the bill on January 17, 2012.</p>
-            </div>
-        </div>
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>August 2012</h3>
-            <p>The NCAA and four pro sports leagues (the NFL, NBA, NHL, and MLB) sue New Jersey to stop it from offering sports betting after the 2011 referendum, arguing that it violates federal law (i.e., PASPA). A string of court battles ensues.</p>
-            </div>
-        </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>June 2017</h3>
-            <p>The Supreme Court of the United States takes the case.</p>
-            </div>
-        </div>
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>December 2017</h3>
-            <p> While New Jersey battles against PASPA, the sports leagues argue for the prohibition of gambling in the state to be upheld</p>
-            </div>
-        </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>May 2018</h3>
+        <p>After 2 decades of going back and forth between legislature, the ban on sports betting was lifted.</p>
+        <div class="tip" label="May 2018" style="max-width: none;">
             <p>The U.S. Supreme Court rules for New Jersey and strikes down PASPA; all states can now legalize sports betting.</p>
-            </div>
         </div>
-    </div> -->
-    <div class="card grid grid-cols-1 grid-rows-4">
-        <div class="grid-colspan-1 grid-rowspan-4">${
-            resize((width) => mapPlot({width}))
-        }</div>
-        <h3>${stateFilterInput}</h3>
     </div>
-    <div class="history-text">
-        <h2>Different states, different regulations</h2>
-        <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
+    <div class="card grid grid-cols-1 grid-rows-4">
+        <div>
+            <h2>Explore the Legality of Sports Betting across U.S. States</h2>
+            <h3>Hover to view more details</h3>
+            <h3 style="max-width: 320px; margin-top: 0.5rem;">${stateFilterInput}</h3>
+            <div class="grid-colspan-1 grid-rowspan-4">${
+                resize((width) => mapPlot({width}))
+            }</div>
+        </div>
+    </div>
+    <div>
+        <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than physically attending in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
     </div>
 </section>
 
@@ -175,7 +155,7 @@ function searchTrend(data, {width}){
 ```
 
 <section id="trend">
-    <h1>Is It Really That Popular?</h1>
+    <h1 class="heading">Is It Really That Popular?</h1>
     <p> Sports betting has steadily grown in public interest over the past two decades, and this trend is clearly reflected in the Google search data visualized above. The blue line shows how often people searched for “sports betting” over time, while the red regression line highlights the long-term direction of this activity. Despite short-term spikes around major sporting events, the upward slope of the regression line suggests a gradual and consistent increase in interest. In other words, people are searching for sports betting more frequently now than in previous years, reflecting broader cultural acceptance, expanding legalization across states, and rising accessibility through online platforms. </p>
     <div class="grid grid-cols-1">
     <div class="card">${
@@ -184,14 +164,163 @@ function searchTrend(data, {width}){
     </div>
 </section>
 
+```js
+function generateValue(target, defaultValue) {
+  return Generators.observe((notify) => {
+    const changed = ({target}) => notify(target.value ?? defaultValue);
+    if (defaultValue !== undefined) notify(defaultValue);
+    target.addEventListener("input", changed);
+    return () => target.removeEventListener("input", changed);
+  });
+}
+
+function platformLineChart(data, {width, height = 94, x = "Year", y, percent} = {}) {
+  return Plot.plot({
+    width,
+    height,
+    axis: null,
+    margin: 0,
+    insetTop: 10,
+    insetLeft: -17,
+    insetRight: -17,
+    insetBottom: -17,
+    y: {zero: true, percent, domain: percent ? [0, 100] : undefined},
+    marks: [Plot.areaY(data, {x, y, fillOpacity: 0.2}), Plot.lineY(data, {x, y, tip: true})]
+  });
+}
+
+function trendNumber(data, {focus, value, ...options} = {}) {
+  const focusIndex = data.findIndex((d) => d === focus);
+  if (focusIndex <= 0) {
+    return formatTrend(0, options);
+  }
+  return formatTrend(focus[value] - data[focusIndex - 1]?.[value], options);
+}
+
+function formatTrend(
+  value,
+  {
+    locale,
+    format = {},
+    positive = "green",
+    negative = "red",
+    base = "muted",
+    positiveSuffix = "m ↗︎",
+    negativeSuffix = "m ↘︎",
+    baseSuffix = ""
+  } = {}
+) {
+  if (format.signDisplay === undefined) format = {...format, signDisplay: "always"};
+  return html`<span class="small ${value > 0 ? positive : value < 0 ? negative : base}">${value.toLocaleString(
+    locale,
+    format
+  )}${value > 0 ? positiveSuffix : value < 0 ? negativeSuffix : baseSuffix}`;
+}
+```
+
+```js
+const formatYear = d3.timeFormat("%Y");
+
+const fanduelUserData = await FileAttachment("./csv_Files/fanduel_users.csv").csv();
+const transformed_fanduelUserData = fanduelUserData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Users: +d.Users
+}));
+
+const fanduelDownloadsData = await FileAttachment("./csv_Files/fanduel_downloads.csv").csv();
+const transformed_fanduelDownloadsData = fanduelDownloadsData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Downloads: +d.Downloads
+}));
+
+const draftkingsUserData = await FileAttachment("./csv_files/draftkings_users.csv").csv();
+const transformed_draftkingsUserData = draftkingsUserData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Users: +d.Users
+}));
+
+const draftkingsDownloadsData = await FileAttachment("./csv_files/draftkings_downloads.csv").csv();
+const transformed_draftkingsDownloadsData = draftkingsDownloadsData.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Downloads: +d.Downloads
+}));
+
+const fanduelUsersChart = resize((width) => platformLineChart(transformed_fanduelUserData, {width, y: "Users"}));
+const fanduelDownloadsChart = resize((width) => platformLineChart(transformed_fanduelDownloadsData, {width, y: "Downloads"}));
+const draftkingsUsersChart = resize((width) => platformLineChart(transformed_draftkingsUserData, {width, y: "Users"}));
+const draftkingsDownloadsChart = resize((width) => platformLineChart(transformed_draftkingsDownloadsData, {width, y: "Downloads"}));
+
+const fanduelUsers = generateValue(fanduelUsersChart, transformed_fanduelUserData[transformed_fanduelUserData.length - 1]);
+const fanduelDownloads = generateValue(fanduelDownloadsChart, transformed_fanduelDownloadsData[transformed_fanduelDownloadsData.length - 1]);
+const draftkingsUsers = generateValue(draftkingsUsersChart, transformed_draftkingsUserData[transformed_draftkingsUserData.length - 1]);
+const draftkingsDownloads = generateValue(draftkingsDownloadsChart, transformed_draftkingsDownloadsData[transformed_draftkingsDownloadsData.length - 1]);
+```
+
+```js
+const app_revenue_data = await FileAttachment("./csv_Files/app_revenue.csv").csv();
+const transformed_app_revenue = app_revenue_data.map(d => ({
+    ...d,
+    Year: new Date(d.Year),
+    Revenue: +d.Revenue,
+  }));
+
+function appRevenue({width, height}) {
+    return Plot.plot({
+        title: "Towards the Digital Era",
+        subtitle: "Revenue from leading online sports betting platforms FanDuel & DraftKings",
+        width,
+        x: {grid: true, label: "Year", type: "band"},
+        y: {label: "Revenue (Billion USD)"},
+        fx: {domain: ["FanDuel", "DraftKings"]},
+        marks: [
+            Plot.barY(transformed_app_revenue, {
+                x: "Year",
+                y: "Revenue",
+                fx: "Platform",
+                fill: d => d.Platform === "FanDuel" ? "#0078FF" : "#61B510",
+                tip: true,
+                insetLeft: 5,
+                insetRight: 5
+            }),
+        ]
+    });
+}
+```
+
 <section id="platforms">
-    <h1>Comparing Platforms</h1>
-    <img src="./assets/Platform-Comparison.png" alt="">
-    <h3>Where does the revenue go?</h3>
-    <p>In the first 13 months of legalization, the largest cut of revenue was, unsurprisingly, retained by the sports betting operators. However, a few other groups also gain from legalization.</p>
-    <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. With the development of these statespecific regulations and policies, the first year's sum of almost 70 million U.S. dollars looks set to grow in the future.</p>
-    <p>Meanwhile, the federal government takes 0.25 percent of all sportsbook handles in the U.S., which may not sound like much, but it resulted in a payment of almost 25 million U.S. dollars between June 2018 and July 2019. This figure also stands to grow alongside the market.</p>
-    <p>Lastly, the smallest cut went to the operator's tax obligations to cities, counties, horse racing purses, and other community investments.</p>
+    <h1 class="heading">Online Presence</h1>
+    <p>The emergence of gambling platforms like FanDuel and DraftKings marked a culture shift in U.S. sports betting by shifting activity from casino sportsbooks to digital, mobile-first platforms. Originally launched in the 2010s as daily fantasy sports companies, both companies were well positioned to pivot after the legalization of sports betting in 2018. FanDuel and DraftKings helped normalize betting as an always-available, online activity rather than a restricted experience limited to physical locations. With advertisements, sponsorships and partnerships from professional sport leagues like the NBA, NHL, NFL, MLB and UFC, these platforms have redefined how the population engages with sports betting.</p>
+    <div class="grid grid-cols-4">
+        <div class="card crop">
+            <h2><span style="color: #0078FF;">FanDuel</span> Active Users <span class="muted">(2020 - 2024)</span></h2>
+            <div class="big">${fanduelUsers.Users.toLocaleString("en-US")}m ${trendNumber(transformed_fanduelUserData, {focus: fanduelUsers, value: "Users"})}</div>${
+                fanduelUsersChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #0078FF;">FanDuel</span> App Downloads <span class="muted">(2019 - 2024)</span></h2>
+            <div class="big">${fanduelDownloads.Downloads.toLocaleString("en-US")}m ${trendNumber(transformed_fanduelDownloadsData, {focus: fanduelDownloads, value: "Downloads"})}</div>${
+                fanduelDownloadsChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #61B510;">DraftKings</span> Active Users <span class="muted">(2020 - 2024)</span></h2>
+            <div class="big">${draftkingsUsers.Users.toLocaleString("en-US")}m ${trendNumber(transformed_draftkingsUserData, {focus: draftkingsUsers, value: "Users"})}</div>${
+                draftkingsUsersChart
+        }</div>
+        <div class="card crop">
+            <h2><span style="color: #61B510;">DraftKings</span> App Downloads <span class="muted">(2019 - 2024)</span></h2>
+            <div class="big">${draftkingsDownloads.Downloads.toLocaleString("en-US")}m ${trendNumber(transformed_draftkingsDownloadsData, {focus: draftkingsDownloads, value: "Downloads"})}</div>${
+                draftkingsDownloadsChart
+        }</div>
+    </div>
+    <div class="grid grid-cols-4">
+        <div class="card grid-colspan-4">${
+            resize((width) => appRevenue({width}))
+        }</div>
+    </div>
 </section>
 
 
@@ -226,11 +355,12 @@ const highlightedStates = new Set(["New Jersey", "Nevada", "New York"]);
 function revenuePlot({width}) {
     return Plot.plot({
         title: "Sports Betting Revenue by State (2018-2022)",
-        subtitle: "The sports betting ban was lifted in May 2018 by the U.S. Supreme Court, allowing each state to impose their own rules.",
+        subtitle: "Hover to reveal key dates",
         width,
         marginLeft: 80,
         color: {legend: true},
         x: {grid: true, label: "Year"},
+        y: {label: "Revenue (Million USD)"},
         marks: [
             Plot.lineY(transformedRevenueData.filter((d) => !highlightedStates.has(d.State)), 
                 {
@@ -248,30 +378,30 @@ function revenuePlot({width}) {
                     x: "Date",
                     y: "Revenue",
                     stroke: "State",
-                    tip: true,
                     curve: "monotone-x",
                     markerEnd: true
                 }
             ),
+            // tips are best shown at min width 1100
             Plot.tip(
                 [`Sports Betting is legalized in New Jersey. (June 2018)`],
-                {x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top"})
             ),
             Plot.tip(
                 [`The first online sports bet placed in New Jersey. (August 2018)`],
-                {x: new Date("2018-08-1"), y: 133, dy: -120, anchor: "bottom"}
+                Plot.pointerX({x: new Date("2018-08-1"), y: 133, dy: -120, anchor: "bottom"})
             ),
             Plot.tip(
                 [`In-person sports betting is made legal in New York at specific casinos. (July 2019)`],
-                {x: new Date("2019-07-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2019-07-1"), y: 133, dy: 10, anchor: "top"})
             ),
             Plot.tip(
                 [`New York legalizes sports betting apps. (January 2022)`],
-                {x: new Date("2022-01-1"), y: 133, dy: -245, anchor: "bottom"}
+                Plot.pointerX({x: new Date("2022-01-1"), y: 133, dy: -245, anchor: "bottom"})
             ),
             Plot.tip(
                 [`Nevada still requires in-person registration for mobile sports betting. (January 2022)`],
-                {x: new Date("2022-01-1"), y: 133, dy: 10, anchor: "top"}
+                Plot.pointerX({x: new Date("2022-01-1"), y: 133, dy: 10, anchor: "top"})
             )
         ]
     });
@@ -279,11 +409,6 @@ function revenuePlot({width}) {
 ```
 
 ```js
-const defaultStartEnd = [transformedRevenueData.at(-53).Date, transformedRevenueData.at(-1).Date];
-const startEnd = Mutable(defaultStartEnd);
-const setStartEnd = (se) => startEnd.value = (se ?? defaultStartEnd);
-const getStartEnd = () => startEnd.value;
-
 const usa_revenue_data = await FileAttachment("./csv_Files/usa_revenue.csv").csv();
 const transformed_usa_revenue = usa_revenue_data.map(d => ({
     Year: +d.Year,
@@ -304,31 +429,20 @@ function usaRevenue({width, height}) {
             Plot.barY(transformed_usa_revenue, {
                 x: "Date",
                 y: "Handle",
-                fill: "#405EC7",
+                fill: "#0078FF",
                 tip: true,
                 insetLeft: 5,
                 insetRight: 5
             }),
-            // Plot.ruleY([6.7, 9.9], {
-            //     stroke: "red",
-            //     strokeWidth: 2,
-            //     strokeDasharray: "4 4",
-            //     title: "Target Revenue"
-            // })
         ]
     });
 }
 ```
 
-<section id="regulations">
+<section id="regulations" class="heading">
     <h1>Regulating the 'Sport'</h1>
-    <p>When it comes to public opinion on sports betting, it seems that most Americans have sided with the courts. In 2019, the majority of the U.S. public supported the legalization of sports betting in their respective states. Although, as has been previously shown, while sports betting has been met with considerable approval, the legislation is yet to catch up.</p>
-    <p>Some of the perks of legalizing sports betting include the following:</p>
-    <ul class="bulletpoint-list">
-        <li>Economic benefits</li>
-        <li>The potential to win money</li>
-        <li>An added element of excitement when watching sports</li>
-    </ul>
+    <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. Generally, the tax revenue from sports betting is designated for public projects and state funds, which go back to the community and to numerous responsible gambling initiatives.</p>
+    <p>In New York, sports betting revenue is taxed at 51 percent, with all funds providing aid to public school education. Additionally, $5 million is used anually to fund sports programs for underserved youths, and $6 million is used anually to fund problem gambling education and treatment.</p>
 </div>
 
 <div class="grid">
@@ -845,6 +959,6 @@ function BettingSimulator() {
 ```
 
 <section id="simulator">
-    <h1 class="sim-title">Try Your Own Luck !</h1>
+    <h1 class="heading">Try Your Own Luck!</h1>
     <div class="card">${BettingSimulator()}</div>
 </section>

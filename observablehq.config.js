@@ -17,12 +17,12 @@ export default {
   // ],
 
   // Content to add to the head of the page, e.g. for a favicon:
-  head: ({path}) => `<link rel="icon" href="observable.png" type="image/png" sizes="32x32">`,
+  head: "",
 
   // The path to the source root.
   root: "src",
 
-  footer: ""
+  footer: `IAT 355 by Jie Lan, Joseph Nevado, Kayne Hoy. <a href="https://github.com/kayneh-dev/IAT355-FinalProject/blob/main/README.md">Sources</a>`
 
   // Some additional configuration options and their defaults:
   // theme: "default", // try "light", "dark", "slate", etc.

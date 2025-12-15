@@ -1,53 +1,53 @@
-States,FIPS,Legality
-Alabama,1,Illegal
-Alaska,2,Illegal
-Arizona,4,Legal
-Arkansas,5,Legal
+States,FIPS,Legality,LegalDate
+Alabama,1,Illegal,
+Alaska,2,Illegal,
+Arizona,4,Legal,2021-09
+Arkansas,5,Legal,2019-07
 California,6,Illegal
-Colorado,8,Legal
-Connecticut,9,Legal
-Delaware,10,Legal
-Florida,12,Legal
-Georgia,13,Illegal
-Hawaii,15,Illegal
-Idaho,16,Illegal
-Illinois,17,Legal
-Indiana,18,Legal
-Iowa,19,Legal
-Kansas,20,Legal
-Kentucky,21,Legal
-Louisiana,22,Legal
-Maine,23,Online only
-Maryland,24,Legal
-Massachusetts,25,Legal
-Michigan,26,Legal
-Minnesota,27,Illegal
-Mississippi,28,Retail only
-Missouri,29,Legal
-Montana,30,Retail only
-Nebraska,31,Retail only
-Nevada,32,Legal
-New Hampshire,33,Legal
-New Jersey,34,Legal
-New Mexico,35,Retail only
-New York,36,Legal
-North Carolina,37,Legal
-North Dakota,38,Retail only
-Ohio,39,Legal
-Oklahoma,40,Illegal
-Oregon,41,Legal
-Pennsylvania,42,Legal
-Puerto Rico,72,Online only
-Rhode Island,44,Legal
-South Carolina,45,Illegal
-South Dakota,46,Retail only
-Tennessee,47,Online only
-Texas,48,Illegal
-Utah,49,Illegal
-Vermont,50,Online only
-Virginia,51,Legal
-Washington,53,Legal
-"Washington, D.C.",11,Legal
-West Virginia,54,Legal
-Wisconsin,55,Legal
-Wyoming,56,Online only
+Colorado,8,Legal,2020-05
+Connecticut,9,Legal,2021-10
+Delaware,10,Legal,2018-07
+Florida,12,Legal,2023-11
+Georgia,13,Illegal,
+Hawaii,15,Illegal,
+Idaho,16,Illegal,
+Illinois,17,Legal,2020-05
+Indiana,18,Legal,2019-05
+Iowa,19,Legal,2019-05
+Kansas,20,Legal,2022-09
+Kentucky,21,Legal,2023-09
+Louisiana,22,Legal,2022-01
+Maine,23,Online only,2023-11
+Maryland,24,Legal,2022-11
+Massachusetts,25,Legal,2023-03
+Michigan,26,Legal,2020-03
+Minnesota,27,Illegal,
+Mississippi,28,Retail only,2018-09
+Missouri,29,Legal,2025-12
+Montana,30,Retail only,2020-03
+Nebraska,31,Retail only,2021-05
+Nevada,32,Legal,1949-06
+New Hampshire,33,Legal,2019-12
+New Jersey,34,Legal,2018-06
+New Mexico,35,Retail only,2018-10
+New York,36,Legal,2019-07
+North Carolina,37,Legal,2024-03
+North Dakota,38,Retail only,2021-12
+Ohio,39,Legal,2023-01
+Oklahoma,40,Illegal,
+Oregon,41,Legal,2019-09
+Pennsylvania,42,Legal,2018-11
+Puerto Rico,72,Online only,
+Rhode Island,44,Legal,2018-11
+South Carolina,45,Illegal,
+South Dakota,46,Retail only,2021-09
+Tennessee,47,Online only,2020-11
+Texas,48,Illegal,
+Utah,49,Illegal,
+Vermont,50,Online only,2024-01
+Virginia,51,Legal,2021-01
+Washington,53,Legal,2020-03
+"Washington, D.C.",11,Legal,2019-05
+West Virginia,54,Legal,2018-09
+Wisconsin,55,Legal,2021-11
+Wyoming,56,Online only,2021-04
