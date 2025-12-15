@@ -717,7 +717,12 @@ function BettingSimulator() {
         },
         marks: [
             Plot.lineY(balanceHistory, {x: "bet", y: "balance", stroke: "#3b82f6", strokeWidth: 3}),
-            Plot.dot(balanceHistory, {x: "bet", y: "balance", fill: "#171716", stroke: "#3b82f6", strokeWidth: 2, tip: true}),
+            Plot.dot(balanceHistory, {x: "bet", y: "balance", fill: "#171716", stroke: "#3b82f6", strokeWidth: 2, 
+                                      channels: {"Bankroll ($)": (d) => d.balance.toFixed(2)},
+                                      tip: {
+                                        format: {y: false, x: true, "Bankroll ($)": true}
+                                      } 
+            }),
             Plot.ruleY([1000], {stroke: "#ef4444", strokeDasharray: "4,4", opacity: 0.5})
         ]
     });
@@ -904,7 +909,7 @@ function BettingSimulator() {
         const row = document.createElement('div');
         row.className = 'sim-receipt-row'; 
         const resultClass = game.result === 'Win' ? 'text-win' : 'text-loss';
-        row.innerHTML = `<span>${game.name} (${game.result})</span><span class="${resultClass}">${game.val >= 0 ? '+' : ''}$${game.val.toFixed(0)}</span>`;
+        row.innerHTML = `<span>${game.name} (${game.result})</span><span class="${resultClass}">${game.val >= 0 ? '+' : ''}$${game.val.toFixed(2)}</span>`;
         receiptGamesList.appendChild(row);
     });
     const userProfit = balance - initialBalance;
