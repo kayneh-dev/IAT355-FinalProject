@@ -100,6 +100,7 @@ section {
 .subtitle-text {
     font-family: "Roboto Mono", system-ui;
     font-size: 12px;
+    font-weight: normal;
 }
 
 .heading {
@@ -129,6 +130,7 @@ section {
     .subtitle-text {
         font-family: "Roboto Mono", system-ui;
         font-size: 24px;
+        font-weight: normal;
     }
 }
 

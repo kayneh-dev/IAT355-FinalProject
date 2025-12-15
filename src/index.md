@@ -9,7 +9,9 @@ style: styleExtension.css
     <video src="./assets/represent2526-hero.mp4" autoplay muted loop playsinline></video>
         <div id="title-text-container">
             <h1 class="title-text">The Rise of <span>Sports Betting</span></h1>
-            <h2 class="subtitle-text">Analyzing a Culture Shift in Gambling</h2>
+            <div>
+                <h2 class="subtitle-text">Analyzing a Culture Shift in Gambling</h2>
+            </div>
         </div>
     </div>
 </section>
