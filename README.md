@@ -13,3 +13,4 @@ https://www.canadiangamingbusiness.com/2025/11/20/senators-letter-prime-minister
 https://www.covers.com/betting/betting-revenue-tracker
 https://rg.org/guides/regulations
 https://rg.org/statistics/us
+https://nbarepresent.ca/
