@@ -235,14 +235,14 @@ const transformed_fanduelDownloadsData = fanduelDownloadsData.map(d => ({
     Downloads: +d.Downloads
 }));
 
-const draftkingsUserData = await FileAttachment("./csv_files/draftkings_users.csv").csv();
+const draftkingsUserData = await FileAttachment("./csv_Files/draftkings_users.csv").csv();
 const transformed_draftkingsUserData = draftkingsUserData.map(d => ({
     ...d,
     Year: new Date(d.Year),
     Users: +d.Users
 }));
 
-const draftkingsDownloadsData = await FileAttachment("./csv_files/draftkings_downloads.csv").csv();
+const draftkingsDownloadsData = await FileAttachment("./csv_Files/draftkings_downloads.csv").csv();
 const transformed_draftkingsDownloadsData = draftkingsDownloadsData.map(d => ({
     ...d,
     Year: new Date(d.Year),
