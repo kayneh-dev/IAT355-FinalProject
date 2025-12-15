@@ -439,8 +439,8 @@ function usaRevenue({width, height}) {
 }
 ```
 
-<section id="regulations" class="heading">
-    <h1>Regulating the 'Sport'</h1>
+<section id="regulations">
+    <h1 class="heading">Regulating the 'Sport'</h1>
     <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. Generally, the tax revenue from sports betting is designated for public projects and state funds, which go back to the community and to numerous responsible gambling initiatives.</p>
     <p>In New York, sports betting revenue is taxed at 51 percent, with all funds providing aid to public school education. Additionally, $5 million is used anually to fund sports programs for underserved youths, and $6 million is used anually to fund problem gambling education and treatment.</p>
 </div>
