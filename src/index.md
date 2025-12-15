@@ -76,54 +76,28 @@ function mapPlot({width}) {
                 opacity: d => stateFilter === "All" || d.Legality === stateFilter ? 1 : 0.25,
                 tip: true 
             }),
-            // Plot.tip(mapData, Plot.geoCentroid({title: (d) => stateFilter === "All" || d.Legality === stateFilter ? d.States : undefined, anchor: "bottom", textPadding: 3}))
         ]
     });
 }
 ```
+<section id="overview">
+    <h1>Overview</h1>
+    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
+</section>
 
 <section id="history">
-    <p>Sports betting has shifted from a niche activity to a mainstream feature of American sports culture. Fans no longer just watch games, they place wagers through mobile apps, track odds in real time, and see betting promotions during live broadcasts. This rapid growth has been driven by changes in U.S. law, aggressive marketing from sportsbooks, and the convenience of online platforms. At the same time, it has raised serious questions about regulation and who really benefits financially. We will explore how sports betting became legal, how popular it has become, which platforms dominate the market, and what risks are hidden behind the excitement.</p>
-    <h1>History of Sports Betting in the United States</h1>
-    <!-- <h1>How Sports Betting Became Legal in the United States</h1>
-    <div class="timeline">
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>January 1992</h3>
-            <p>The Professional and Amateur Sports Protection Act of 1992 (PASPA) signed into law; sports betting becomes illegal in the U.S.</p>
-            </div>
+    <h1>Brief History of Sports Betting in the United States</h1>
+    <div>
+        <p>Sports betting in the United States traces its modern roots to Las Vegas, where Nevada’s decision to legalize gambling in 1931 made it the only place in the country where sports wagering could operate openly and legally. For decades, while most states prohibited betting, Las Vegas casinos became the center of the industry. Long before legalization spread across the country, Las Vegas shaped the culture, economics, and structure of American sports betting, earning its role as the birthplace of the modern industry.</p>
+        <p>However in June 1991, sports betting was found to be a national problem. As sports betting grew more widespread, the federal government passed a series of laws to act around an industry that was spiraling into scandals and criminality.</p>
+        <div class="caution" label="January 1992" style="max-width: none;">
+            <p>The Professional and Amateur Sports Protection Act of 1992 (PASPA) signed into law. Sports betting becomes illegal in the U.S. with Nevada, Oregon, Delaware and Montana being permitted to continue operations that were already in existence.</p>
         </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>November 2011</h3>
-            <p>The Sports Betting Amendment is approved in New Jersey. The measure amends the state constitution to allow the legislature to legalize betting on the results of professional, college, and amateur sporting events. Governor Christie signs the bill on January 17, 2012.</p>
-            </div>
-        </div>
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>August 2012</h3>
-            <p>The NCAA and four pro sports leagues (the NFL, NBA, NHL, and MLB) sue New Jersey to stop it from offering sports betting after the 2011 referendum, arguing that it violates federal law (i.e., PASPA). A string of court battles ensues.</p>
-            </div>
-        </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>June 2017</h3>
-            <p>The Supreme Court of the United States takes the case.</p>
-            </div>
-        </div>
-        <div class="timeline-container left">
-            <div class="content">
-            <h3>December 2017</h3>
-            <p> While New Jersey battles against PASPA, the sports leagues argue for the prohibition of gambling in the state to be upheld</p>
-            </div>
-        </div>
-        <div class="timeline-container right">
-            <div class="content">
-            <h3>May 2018</h3>
+        <p>After 2 decades of going back and forth between legislature, the ban on sports betting was lifted.</p>
+        <div class="tip" label="May 2018" style="max-width: none;">
             <p>The U.S. Supreme Court rules for New Jersey and strikes down PASPA; all states can now legalize sports betting.</p>
-            </div>
         </div>
-    </div> -->
+    </div>
     <div class="card grid grid-cols-1 grid-rows-4">
         <div>
             <h2>Explore the Legality of Sports Betting across U.S. States</h2>
@@ -134,9 +108,8 @@ function mapPlot({width}) {
             }</div>
         </div>
     </div>
-    <div class="history-text">
-        <h2>Different states, different regulations</h2>
-        <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than the land-based alternatives that bettors must attend in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
+    <div>
+        <p>Like many industries, going online looks to be the next step in the sports betting world. It allows consumers to place bets on sports in a convenient manner via a website or app. It is ultimately a more accessible way to wager money on sports than physically attending in person. But not all states that have legalized sports betting have, or will, allow online or mobile wagering. Some states, like North Carolina, require all bets to be placed inside a casino. Meanwhile, states like New Jersey have legalized both land-based and online wagering. In September 2021, over 90 percent of sports bets in New Jersey were placed online.</p>
     </div>
 </section>
 
@@ -320,7 +293,8 @@ function appRevenue({width, height}) {
 ```
 
 <section id="platforms">
-    <h1>Comparing Platforms</h1>
+    <h1>Online Presence</h1>
+    <p>The emergence of gambling platforms like FanDuel and DraftKings marked a culture shift in U.S. sports betting by shifting activity from casino sportsbooks to digital, mobile-first platforms. Originally launched in the 2010s as daily fantasy sports companies, both companies were well positioned to pivot after the legalization of sports betting in 2018. FanDuel and DraftKings helped normalize betting as an always-available, online activity rather than a restricted experience limited to physical locations. With advertisements, sponsorships and partnerships from professional sport leagues like the NBA, NHL, NFL, MLB and UFC, these platforms have redefined how the population engages with sports betting.</p>
     <div class="grid grid-cols-4">
         <div class="card crop">
             <h2><span style="color: #0078FF;">FanDuel</span> Active Users <span class="muted">(2020 - 2024)</span></h2>
@@ -348,11 +322,6 @@ function appRevenue({width, height}) {
             resize((width) => appRevenue({width}))
         }</div>
     </div>
-    <h3>Where does the revenue go?</h3>
-    <p>In the first 13 months of legalization, the largest cut of revenue was, unsurprisingly, retained by the sports betting operators. However, a few other groups also gain from legalization.</p>
-    <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. With the development of these statespecific regulations and policies, the first year's sum of almost 70 million U.S. dollars looks set to grow in the future.</p>
-    <p>Meanwhile, the federal government takes 0.25 percent of all sportsbook handles in the U.S., which may not sound like much, but it resulted in a payment of almost 25 million U.S. dollars between June 2018 and July 2019. This figure also stands to grow alongside the market.</p>
-    <p>Lastly, the smallest cut went to the operator's tax obligations to cities, counties, horse racing purses, and other community investments.</p>
 </section>
 
 
@@ -387,7 +356,7 @@ const highlightedStates = new Set(["New Jersey", "Nevada", "New York"]);
 function revenuePlot({width}) {
     return Plot.plot({
         title: "Sports Betting Revenue by State (2018-2022)",
-        subtitle: "The sports betting ban was lifted in May 2018 by the U.S. Supreme Court, allowing each state to impose their own rules.",
+        subtitle: "Hover to reveal key dates",
         width,
         marginLeft: 80,
         color: {legend: true},
@@ -417,7 +386,7 @@ function revenuePlot({width}) {
             // tips are best shown at min width 1100
             Plot.tip(
                 [`Sports Betting is legalized in New Jersey. (June 2018)`],
-                Plot.pointerX({x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top", textOverflow: "clip"})
+                Plot.pointerX({x: new Date("2018-06-1"), y: 133, dy: 10, anchor: "top"})
             ),
             Plot.tip(
                 [`The first online sports bet placed in New Jersey. (August 2018)`],
@@ -473,13 +442,8 @@ function usaRevenue({width, height}) {
 
 <section id="regulations">
     <h1>Regulating the 'Sport'</h1>
-    <p>When it comes to public opinion on sports betting, it seems that most Americans have sided with the courts. In 2019, the majority of the U.S. public supported the legalization of sports betting in their respective states. Although, as has been previously shown, while sports betting has been met with considerable approval, the legislation is yet to catch up.</p>
-    <p>Some of the perks of legalizing sports betting include the following:</p>
-    <ul class="bulletpoint-list">
-        <li>Economic benefits</li>
-        <li>The potential to win money</li>
-        <li>An added element of excitement when watching sports</li>
-    </ul>
+    <p>There are varying state policies regarding the taxing of sports betting, meaning that some states are bringing in more tax revenue than others. Generally, the tax revenue from sports betting is designated for public projects and state funds, which go back to the community and to numerous responsible gambling initiatives.</p>
+    <p>In New York, sports betting revenue is taxed at 51 percent, with all funds providing aid to public school education. Additionally, $5 million is used anually to fund sports programs for underserved youths, and $6 million is used anually to fund problem gambling education and treatment.</p>
 </div>
 
 <div class="grid">
